@@ -19,9 +19,17 @@ public class BubbleShooter extends JPanel{
 	private void setupUI() {
 		this.setLayout(new BorderLayout());
 		this.setBackground(BSColor.blackCherry);
-		
+		this.setupGrid();
 		this.setupShooter();
 		
+	}
+	
+	private void setupGrid() {
+		JPanel gridPanel = new JPanel();
+		gridPanel.setBackground(Color.white);
+		gridPanel.setPreferredSize(new Dimension(1000,300));
+		gridPanel.add(grid);
+		this.add(gridPanel,BorderLayout.NORTH);
 	}
 
 	private void setupShooter() {
