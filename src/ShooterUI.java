@@ -12,18 +12,26 @@ public class ShooterUI {
 			public void mousePressed(MouseEvent e) {
 				super.mousePressed(e);
 				shooter.fire();
-				shooter.setDegree(shooter.getDegree()+20);
+				shooter.setDegree(shooter.getDegree()+15);
 				shooter.repaint();
 				}
 			});
-		shooter.setPreferredSize(new Dimension(30,80));
-		shooter.setMaximumSize(new Dimension(30,80));
+		shooter.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				shooter.setDegree(Math.atan2(e.getYOnScreen(), e.getXOnScreen())* 180 / Math.PI);
+				shooter.repaint();
+			}
+		});
+		shooter.setPreferredSize(new Dimension(240,100));
+		//shooter.setMaximumSize(new Dimension(30,80));
 	}
 	
 	public void paint(Graphics2D pen, Shooter shooter) {
 		pen.setColor(Color.lightGray);
-		pen.rotate(Math.toRadians(shooter.getDegree()));
-		pen.fillRect(0, 0, shooter.getWidth(), shooter.getHeight());
+		pen.rotate(Math.toRadians(shooter.getDegree()),135,100);
+		pen.fillRect(120, 20, 30, 80);
+		
 	}
 }
 

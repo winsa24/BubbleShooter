@@ -7,27 +7,36 @@ public class Shooter extends JComponent{
 	
 	private ShooterUI ui;
 	private ShooterModel model;
-	private int degree;
+	private double degree;
+	private BubbleShooter window;
 	
-	public Shooter() {
+	public Shooter(BubbleShooter window) {
 		this.model= new ShooterModel();
 		this.ui= new ShooterUI();
 		this.ui.installUI(this);
 	}
 	
-	public int getDegree() {
-		return degree;
+	public double getDegree() {
+		return this.degree;
 	}
 	
 	public ShooterModel getModel(){
-		return model;
+		return this.model;
+	}
+	
+	public int getWindowHeight() {
+		return this.window.getHeight();
+	}
+	
+	public int getWindowWidth() {
+		return this.window.getWidth();
 	}
 	
 	public void fire() {
 		this.model.fireActionListener();
 	}
 	
-	public void setDegree(int degree) {
+	public void setDegree(double degree) {
 		this.degree = degree;
 	}
 	
