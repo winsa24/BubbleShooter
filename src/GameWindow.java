@@ -61,6 +61,12 @@ public class GameWindow extends JFrame {
 
 		bottomPanel.setPreferredSize(new Dimension(1000,150));
 		bottomPanel.setBackground(BSColor.trypanBlue);
+		bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT,200,10));
+		
+		JPanel loader = new JPanel();
+		loader.setBackground(Color.PINK);
+		loader.setPreferredSize(new Dimension(200,30));
+		bottomPanel.add(loader);
 			
 		JLabel scoreLabel = new JLabel("Your Score : " + currentScore);
 		scoreLabel.setFont(new Font("Calibri", Font.BOLD, 24));

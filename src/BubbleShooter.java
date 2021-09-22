@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 public class BubbleShooter extends JPanel{
@@ -25,6 +28,13 @@ public class BubbleShooter extends JPanel{
 		JPanel shooterPanel = new JPanel();
 		shooterPanel.setBackground(BSColor.blackCherry);
 		shooterPanel.setPreferredSize(new Dimension(1000,80));
+		shooter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Shooter fired");
+			}
+		});
+		
 		shooterPanel.add(shooter);
 		this.add(shooterPanel,BorderLayout.SOUTH);
 		
