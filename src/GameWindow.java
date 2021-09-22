@@ -9,6 +9,7 @@ public class GameWindow extends JFrame {
 	private BubbleShooter bubbleShooter = new BubbleShooter();
 	private JPanel topPanel = new JPanel();
 	private JPanel bottomPanel = new JPanel();
+	private int currentScore;
 	
 	public GameWindow(String title) {
 		super(title);
@@ -60,6 +61,12 @@ public class GameWindow extends JFrame {
 
 		bottomPanel.setPreferredSize(new Dimension(1000,150));
 		bottomPanel.setBackground(BSColor.trypanBlue);
+			
+		JLabel scoreLabel = new JLabel("Your Score : " + currentScore);
+		scoreLabel.setFont(new Font("Calibri", Font.BOLD, 24));
+		scoreLabel.setForeground(Color.WHITE);
+		bottomPanel.add(scoreLabel);
+		
 		this.getContentPane().add(bottomPanel,BorderLayout.SOUTH);
 	}
 
