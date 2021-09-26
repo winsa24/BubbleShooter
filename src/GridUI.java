@@ -6,19 +6,20 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-public class GridUI extends JPanel{
+public class GridUI extends JPanel {
 	private List<Bubble> bubbles = new ArrayList<>();
-	
+
 	public GridUI() {
-		this.setPreferredSize(new Dimension(600,300));
+		this.setPreferredSize(new Dimension(600, 300));
 	}
-	
+
 	public void add(Bubble bubble) {
 		bubbles.add(bubble);
 	}
+
 	public void paintComponent(Graphics g1d) {
-		Graphics2D g = (Graphics2D)g1d;
-		for(Bubble drawable: bubbles) {
+		Graphics2D g = (Graphics2D) g1d;
+		for (Bubble drawable : bubbles) {
 			drawable.draw(g);
 		}
 	}
