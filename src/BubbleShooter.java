@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
@@ -36,6 +38,21 @@ public class BubbleShooter extends JPanel{
 		JPanel shooterPanel = new JPanel();
 		shooterPanel.setBackground(BSColor.blackCherry);
 		shooterPanel.setPreferredSize(new Dimension(1000,80));
+		
+		this.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				shooter.setDegree(getShooterDegree(e));
+				shooter.repaint();
+			}
+		});
+		this.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				super.mousePressed(e);
+				shooter.fire();
+				shooter.repaint();
+				}
+			});
 		shooter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -46,6 +63,13 @@ public class BubbleShooter extends JPanel{
 		shooterPanel.add(shooter);
 		this.add(shooterPanel,BorderLayout.SOUTH);
 		
+	}
+	
+	private double getShooterDegree(MouseEvent e) {
+		this.revalidate();
+		double x = e.getX()-(this.getWidth()/2);
+		double y = -e.getY()+this.getHeight();
+		return Math.atan2(y,x)* 180 / Math.PI;
 	}
 	
 }
