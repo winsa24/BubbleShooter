@@ -6,7 +6,8 @@ import javax.swing.*;
 
 public class GameWindow extends JFrame {
 	
-	private BubbleShooter bubbleShooter = new BubbleShooter();
+	private Loader loader = new Loader();
+	private BubbleShooter bubbleShooter = new BubbleShooter(loader);
 	private JPanel topPanel = new JPanel();
 	private JPanel bottomPanel = new JPanel();
 	private int currentScore;
@@ -63,9 +64,6 @@ public class GameWindow extends JFrame {
 		bottomPanel.setBackground(BSColor.trypanBlue);
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT,200,10));
 		
-		JPanel loader = new JPanel();
-		loader.setBackground(Color.PINK);
-		loader.setPreferredSize(new Dimension(200,30));
 		bottomPanel.add(loader);
 			
 		JLabel scoreLabel = new JLabel("Your Score : " + currentScore);

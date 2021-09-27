@@ -11,11 +11,12 @@ public class BubbleShooter extends JPanel{
 	
 	private Grid grid = new Grid();
 	private Shooter shooter = new Shooter(this);
+	private Loader loader;
 	
 	
-	public BubbleShooter() {
+	public BubbleShooter(Loader loader) {
+		this.loader= loader;
 		this.setupUI();
-		
 		}
 	
 	private void setupUI() {
@@ -56,7 +57,8 @@ public class BubbleShooter extends JPanel{
 		shooter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Shooter fired");
+				Bubble bubbleFired  = loader.fire();
+				System.out.println(bubbleFired.getColor()+" ball fired");
 			}
 		});
 		

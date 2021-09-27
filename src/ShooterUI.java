@@ -9,14 +9,7 @@ import java.awt.event.MouseEvent;
 public class ShooterUI {
 
 	public void installUI(Shooter shooter) {
-		/*shooter.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				super.mousePressed(e);
-				shooter.fire();
-				shooter.setDegree(shooter.getDegree());
-				shooter.repaint();
-				}
-			});*/
+
 		
 		shooter.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
@@ -35,8 +28,8 @@ public class ShooterUI {
 			rh.put (RenderingHints.KEY_ANTIALIASING,
 			        RenderingHints.VALUE_ANTIALIAS_ON);
 			pen.setRenderingHints (rh);
-		//pen.fillRect(120, 18, 25, 60);
-		pen.fill3DRect(120, 18, 25, 60,true);
+		pen.fillRect(120, 18, 25, 60);
+		//pen.fill3DRect(120, 18, 25, 60,true);
 		
 	}
 }
