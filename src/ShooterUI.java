@@ -12,14 +12,21 @@ public class ShooterUI {
 			public void mousePressed(MouseEvent e) {
 				super.mousePressed(e);
 				shooter.fire();
-				shooter.setDegree(shooter.getDegree()+15);
+				shooter.setDegree(shooter.getDegree());
 				shooter.repaint();
+				}
+			});
+		
+		shooter.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent e) {
+				super.mouseReleased(e);
+				System.out.println("mouse at x: " + (e.getX()-135) + " y : "+ (-e.getY()+80)+ " degree : "+ Math.atan2(-e.getY()+80, e.getX()-125)* 180 / Math.PI);
 				}
 			});
 		shooter.addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				shooter.setDegree(Math.atan2(e.getYOnScreen(), e.getXOnScreen())* 180 / Math.PI);
+				shooter.setDegree(90+ Math.atan2(e.getY()-80, e.getX()-135)* 180 / Math.PI);
 				shooter.repaint();
 			}
 		});

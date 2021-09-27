@@ -14,6 +14,7 @@ public class Shooter extends JComponent{
 		this.model= new ShooterModel();
 		this.ui= new ShooterUI();
 		this.ui.installUI(this);
+		this.window = window;
 	}
 	
 	public double getDegree() {
