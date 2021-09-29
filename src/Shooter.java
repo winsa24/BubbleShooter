@@ -8,7 +8,6 @@ public class Shooter extends JComponent{
 	private ShooterUI ui;
 	private ShooterModel model;
 	private Bubble firedBubble;
-	private boolean isFired;
 	private double degree;
 	private BubbleShooter window;
 	
@@ -37,14 +36,6 @@ public class Shooter extends JComponent{
 		
 	public void setDegree(double degree) {
 		this.degree = degree;
-	}
-	
-	public boolean isFired() {
-		return isFired;
-	}
-
-	public void setFired(boolean isFired) {
-		this.isFired = isFired;
 	}
 	
 	public Bubble getFiredBubble() {

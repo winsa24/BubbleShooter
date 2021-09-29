@@ -19,13 +19,14 @@ public class GameWindow extends JFrame {
 	}
 
 	private void setupUI() {
+		this.setPreferredSize(new Dimension(1000,800));
+		this.setResizable(false);
 		this.getContentPane().setLayout(new BorderLayout());
 		
 		this.setupTop(topPanel);
 		this.setupMainPanel(bubbleShooter);
 		this.setupBottom(bottomPanel);
-		
-		this.setPreferredSize(new Dimension(1000,800));
+	
 		this.pack();
 		
 	}

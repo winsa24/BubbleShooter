@@ -25,10 +25,6 @@ public class GridUI {
 		Graphics2D g = (Graphics2D) g1d;
 		
 		for (Bubble drawable : bubbles) {
-			if(drawable.isFired()) {
-				drawable.drawFired(g, degree);
-			}
-			else
 			drawable.draw(g);
 		}
 		g.dispose();

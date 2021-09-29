@@ -5,6 +5,7 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -87,17 +88,6 @@ public boolean isFired() {
 		g.setRenderingHints (rh);
 		g.setColor(color);
 		g.fillOval(x, y, r, r);
-	}
-	public void drawFired(Graphics2D g,double fireDegree) {
-		RenderingHints rh = g.getRenderingHints ();      
-		rh.put(RenderingHints.KEY_ANTIALIASING,
-		        RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setRenderingHints (rh);
-		
-		g.rotate(fireDegree-90);
-		System.out.println(fireDegree-90);
-		g.setColor(color);
-		g.fillOval(x+100, y+200, r, r);
 	}
 	
 	public boolean contains(Point p) {

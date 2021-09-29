@@ -22,6 +22,7 @@ public class Grid extends JPanel{
 	public Grid() {
 		
 		ui.setupUI(this);
+		
 		for(int i = 0; i < 200; i+= r) {
 			if(i/10%2 == 1) {
 				for(int j = 0; j < 600 - r; j+= r) {
