@@ -1,16 +1,19 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
 public class GridUI extends JPanel {
-	private List<Bubble> bubbles = new ArrayList<>();
-
-	public GridUI() {
+	private List<Bubble> bubbles;
+	
+	
+	public GridUI(Grid grid) {
 		this.setPreferredSize(new Dimension(600, 300));
+		bubbles = grid.getBubbles();
 	}
 
 	public void add(Bubble bubble) {
@@ -23,4 +26,10 @@ public class GridUI extends JPanel {
 			drawable.draw(g);
 		}
 	}
+	
+	public List<Bubble> getBubblesGrid(){
+		return this.bubbles;
+	}
+	
+	
 }
