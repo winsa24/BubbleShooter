@@ -3,7 +3,9 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -41,7 +43,24 @@ public class Grid extends JPanel{
 				Bubble sb = model.isSelected(e.getPoint());
 				System.out.println("selected bubble:" + sb);
 				List<Bubble> sbs = model.checkSurroundings(sb);
-				System.out.println("surrounding same color bubbles:" + sbs);
+				System.out.println("first round surrounding same color bubbles: " + sbs);
+				int size = sbs.size() - 1;
+				while(sbs.size() != size) {
+					size = sbs.size();
+					for(Bubble bubble: sbs) {
+						List<Bubble> newsbs = model.checkSurroundings(bubble);
+						System.out.println("new sbs: " + newsbs);
+//						sbs.removeAll(newsbs);
+//						sbs.addAll(newsbs);
+						
+						// combine two list without duplicate child
+						Set<Bubble> set = new HashSet<>(sbs);
+				        set.addAll(newsbs);
+				        sbs = new ArrayList<>(set);
+					}
+				}
+				System.out.println("final surroundings: " + sbs);
+				
 			}
 		});
 		
