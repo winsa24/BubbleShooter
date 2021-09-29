@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -13,16 +15,13 @@ import javax.swing.JPanel;
 public class Grid extends JPanel{
 	private static int r = 30; //bubble size
 	private List<Bubble> bubbles = new ArrayList<>();
-	
-	
+	private GridUI ui = new GridUI();
+	private GridModel model = new GridModel(this);
+	private double fireDegree=10;
+
 	public Grid() {
-		this.setPreferredSize(new Dimension(600,300));
-		this.setBackground(BSColor.blackCherry);
-		this.setBorder(BorderFactory.createLineBorder(BSColor.trypanBlue, 2));
 		
-		GridUI canvas = new GridUI(this);
-		GridModel model = new GridModel(this);
-		
+		ui.setupUI(this);
 		for(int i = 0; i < 200; i+= r) {
 			if(i/10%2 == 1) {
 				for(int j = 0; j < 600 - r; j+= r) {
@@ -63,9 +62,6 @@ public class Grid extends JPanel{
 				
 			}
 		});
-		
-
-		this.add(canvas);
 	}
 	
 	public List<Bubble> getBubbles(){
@@ -74,5 +70,17 @@ public class Grid extends JPanel{
 	
 	public void add(Bubble bubble) {
 		bubbles.add(bubble);
+	}
+	
+	public double getFireDegree() {
+		return fireDegree;
+	}
+	public void setFireDegree(double Degree) {
+		this.fireDegree=Degree;
+	}
+	
+	public void paintComponent(Graphics g1d) {
+		super.paintComponent(g1d);
+		this.ui.paint(g1d,this);
 	}
 }

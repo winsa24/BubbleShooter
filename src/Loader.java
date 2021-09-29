@@ -16,6 +16,7 @@ public class Loader extends JPanel{
 	
 	public Loader() {
 		setPreferredSize(new Dimension(200,40));
+		setBackground(BSColor.trypanBlue);
 		
 		for(int i = 8; i <bubbleSize*5; i+= bubbleSize+3) {
 				bubblesInLoader.add(new Bubble(i, 5, bubbleSize));
@@ -47,7 +48,10 @@ public class Loader extends JPanel{
 	
 	@Override
 	public void paintComponent(Graphics g1d) {
+		super.paintComponent(g1d);
 		Graphics2D g = (Graphics2D) g1d;
+		g.setColor(BSColor.trypanBlue);
+		g.drawRect(0, 0, this.getWidth(), getHeight());
 		g.setStroke(new BasicStroke(2f));
 		g.setColor(BSColor.blackCherry);
 		RenderingHints rh = g.getRenderingHints ();                  
@@ -58,10 +62,12 @@ public class Loader extends JPanel{
 		g.draw(rec);
 		for (Bubble drawable : bubblesInLoader) {
 			drawable.draw(g);
+			
 		}
-		
+		g.dispose();
+	
 	}
-	}
+}
 
 	
 

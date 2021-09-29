@@ -15,6 +15,7 @@ public class Bubble {
 	private int y;
 	private int r;
 	private static Color[] bubbleColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.PINK, Color.ORANGE};
+	private boolean isFired;
 	private Color color;
 	private static Random random = new Random();
 	
@@ -58,9 +59,27 @@ public class Bubble {
 	public int getR() {
 		return this.r;
 	}
+	
+	public void setX(int x) {
+		this.x=x;
+	}
+	public void setY(int y) {
+		this.y=y;
+	}
+	public void setR(int r) {
+		this.r=r;
+	}
 
 	
-//	@Override
+public boolean isFired() {
+		return isFired;
+	}
+
+	public void setFired(boolean isFired) {
+		this.isFired = isFired;
+	}
+
+	//	@Override
 	public void draw(Graphics2D g) {
 		RenderingHints rh = g.getRenderingHints ();                  
 		rh.put(RenderingHints.KEY_ANTIALIASING,
@@ -68,6 +87,17 @@ public class Bubble {
 		g.setRenderingHints (rh);
 		g.setColor(color);
 		g.fillOval(x, y, r, r);
+	}
+	public void drawFired(Graphics2D g,double fireDegree) {
+		RenderingHints rh = g.getRenderingHints ();      
+		rh.put(RenderingHints.KEY_ANTIALIASING,
+		        RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHints (rh);
+		
+		g.rotate(fireDegree-90);
+		System.out.println(fireDegree-90);
+		g.setColor(color);
+		g.fillOval(x+100, y+200, r, r);
 	}
 	
 	public boolean contains(Point p) {

@@ -7,6 +7,8 @@ public class Shooter extends JComponent{
 	
 	private ShooterUI ui;
 	private ShooterModel model;
+	private Bubble firedBubble;
+	private boolean isFired;
 	private double degree;
 	private BubbleShooter window;
 	
@@ -32,16 +34,27 @@ public class Shooter extends JComponent{
 	public int getWindowWidth() {
 		return this.window.getWidth();
 	}
-	
-	public void fire() {
-		this.model.fireActionListener();
-	}
-	
+		
 	public void setDegree(double degree) {
 		this.degree = degree;
 	}
 	
+	public boolean isFired() {
+		return isFired;
+	}
+
+	public void setFired(boolean isFired) {
+		this.isFired = isFired;
+	}
 	
+	public Bubble getFiredBubble() {
+		return firedBubble;
+	}
+
+	public void setFiredBubble(Bubble firedBubble) {
+		this.firedBubble = firedBubble;
+	}
+
 	public void paintComponent(Graphics pen) {
 		this.ui.paint((Graphics2D) pen, this);
 	}
@@ -49,5 +62,9 @@ public class Shooter extends JComponent{
 	public void addActionListener(ActionListener listener) {
 		this.model.addActionListener(listener);
 	}
+	public void fire() {
+		this.model.fireActionListener();
+	}
+	
 	
 }

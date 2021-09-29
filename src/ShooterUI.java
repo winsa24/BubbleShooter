@@ -31,6 +31,10 @@ public class ShooterUI {
 		pen.fillRect(120, 18, 25, 60);
 		//pen.fill3DRect(120, 18, 25, 60,true);
 		
+		if (shooter.isFired()) {
+			shooter.getFiredBubble().draw(pen);
+		}
+		pen.dispose();
 	}
 }
 
