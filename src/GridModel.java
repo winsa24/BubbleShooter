@@ -21,13 +21,12 @@ public class GridModel {
 	
 	public List<Bubble> checkSurroundings(Bubble selectedBubble){
 		List<Bubble> sbs = new ArrayList<>(); //surrounding bubbles
+		sbs.add(selectedBubble);
 		
 		int x = selectedBubble.getX();
 		int y = selectedBubble.getY();
 		int r = selectedBubble.getR(); //diameter
 		Point center = new Point(x + r/2, y + r/2); // selected bubble
-		System.out.println(center.x);
-		System.out.println(center.y);
 		
 		Point pl = new Point(center.x - r, center.y);
 		Point pr = new Point(center.x + r, center.y);

@@ -16,9 +16,6 @@ public class GridUI extends JPanel {
 		bubbles = grid.getBubbles();
 	}
 
-	public void add(Bubble bubble) {
-		bubbles.add(bubble);
-	}
 
 	public void paintComponent(Graphics g1d) {
 		Graphics2D g = (Graphics2D) g1d;
