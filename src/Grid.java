@@ -26,12 +26,12 @@ public class Grid extends JPanel{
 		for(int i = 0; i < 200; i+= r) {
 			if(i/10%2 == 1) {
 				for(int j = 0; j < 600 - r; j+= r) {
-					canvas.add(new Bubble(j + r/2, i, r));
+					this.add(new Bubble(j + r/2, i, r));
 				}
 			}	
 			else {
 				for(int j = 0; j < 600; j+= r) {
-					canvas.add(new Bubble(j, i, r));
+					this.add(new Bubble(j, i, r));
 				}
 			}
 		}
@@ -70,5 +70,9 @@ public class Grid extends JPanel{
 	
 	public List<Bubble> getBubbles(){
 		return this.bubbles;
+	}
+	
+	public void add(Bubble bubble) {
+		bubbles.add(bubble);
 	}
 }
