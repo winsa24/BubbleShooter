@@ -3,7 +3,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 public class BubbleShooter extends JPanel{
@@ -85,6 +92,7 @@ public class BubbleShooter extends JPanel{
 				animationPanel.repaint();
 				grid.setFireDegree(degree);
 				
+				playShootSound();
 				animateBubble(bubbleFired,100,400,initX,initY,shooter.getDegree());
 				System.out.println(bubbleFired.getColor()+" ball fired at " + shooter.getDegree());
 			}
@@ -108,8 +116,8 @@ public class BubbleShooter extends JPanel{
 	        public void actionPerformed(ActionEvent e) {
 	           double dx=Math.cos(Math.toRadians(degree)) ;
 	           double dy=Math.sin(Math.toRadians(degree)) ;
-	           bubbleFired.setX((int)(initX + 6*currentFrame*dx));  
-	           bubbleFired.setY((int)(initY - 6*currentFrame*dy));  
+	           bubbleFired.setX((int)(initX + 8*currentFrame*dx));  
+	           bubbleFired.setY((int)(initY - 8*currentFrame*dy));  
 	           animationPanel.repaint();
 	            if (currentFrame != maxFrames)
 	                currentFrame++;
@@ -118,6 +126,22 @@ public class BubbleShooter extends JPanel{
 	                ((Timer)e.getSource()).stop();
 	        }});
 		timer.start();
+	}
+	
+	private void playShootSound() {
+		 URL audio= this.getClass().getClassLoader().getResource("data/shoot.wav");
+        try {
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(audio);
+			Clip clip = AudioSystem.getClip();
+	        clip.open(audioIn);
+	        clip.start();
+		} catch (UnsupportedAudioFileException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}catch (LineUnavailableException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	

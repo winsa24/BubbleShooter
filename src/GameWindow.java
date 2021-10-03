@@ -1,5 +1,9 @@
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 
@@ -8,7 +12,7 @@ public class GameWindow extends JFrame {
 	
 	private Loader loader = new Loader();
 	private BubbleShooter bubbleShooter = new BubbleShooter(loader);
-	private JPanel topPanel = new JPanel();
+	private JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,10,25));
 	private JPanel bottomPanel = new JPanel();
 	private int currentScore;
 	
@@ -36,19 +40,24 @@ public class GameWindow extends JFrame {
 		topPanel.setPreferredSize(new Dimension(1000,100));
 		topPanel.setBackground(BSColor.trypanBlue);
 		
-		JButton backButton = new JButton("Back to Menu");
-		topPanel.add(backButton);
+		topPanel.add(Box.createHorizontalStrut(10));
+
+		
+		JButton backButton = setupButton(topPanel, "return.png", "return_hover.png", 48,48);
+		
+		topPanel.add(Box.createHorizontalStrut(250));
 		
 		JLabel title = new JLabel("Happy Bubble Shooter");
 		title.setFont(new Font("Calibri", Font.BOLD, 32));
 		title.setForeground(Color.WHITE);
 		topPanel.add(title);
 		
-		JButton restartButton = new JButton("Restart");
-		topPanel.add(restartButton);
+		topPanel.add(Box.createHorizontalStrut(170));
 		
-		JButton paramsButton = new JButton("Params");
-		topPanel.add(paramsButton);
+		JButton resetButton = setupButton(topPanel, "reset.png", "reset_hover.png", 48,48);
+	
+		
+		JButton paramButton = setupButton(topPanel, "gear.png", "gear_hover.png", 48,48);
 		
 		this.getContentPane().add(topPanel,BorderLayout.NORTH);
 	}
@@ -73,6 +82,54 @@ public class GameWindow extends JFrame {
 		bottomPanel.add(scoreLabel);
 		
 		this.getContentPane().add(bottomPanel,BorderLayout.SOUTH);
+	}
+	
+	private JButton setupButton(JPanel panel, String icon, String iconHover, int w, int h) {
+		ImageIcon iconImg = getIcon(icon,w,h);
+		ImageIcon iconHoverImg = getIcon(iconHover,w,h);
+		JButton button = new JButton(iconImg);
+		
+		button.setRolloverIcon(iconHoverImg);
+		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		button.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+		button.setContentAreaFilled(false);
+		button.setFocusable(false);
+		button.setPreferredSize(new Dimension(w,h));
+		button.setMargin(new Insets(20,20,20,20));
+		button.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		    	playHoverSound();
+		    }});
+		
+		panel.add(button);
+		return button;
+	}
+	
+	private ImageIcon getIcon(String iconPath, int w, int h) {
+		try {
+			Image icon = ImageIO.read(getClass().getResource("data/"+iconPath));
+			icon = icon.getScaledInstance(w, h,  java.awt.Image.SCALE_SMOOTH);
+			return new ImageIcon(icon);
+		} catch (IOException e) {
+			System.out.println("Could not find icon");
+			return null;
+		}
+	}
+	
+	private void playHoverSound() {
+		 URL audio= this.getClass().getClassLoader().getResource("data/hover.wav");
+         try {
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(audio);
+			Clip clip = AudioSystem.getClip();
+	        clip.open(audioIn);
+	        clip.start();
+		} catch (UnsupportedAudioFileException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}catch (LineUnavailableException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 }
