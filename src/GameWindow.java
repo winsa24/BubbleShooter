@@ -38,8 +38,7 @@ public class GameWindow extends JFrame {
 	private void setupTop(JPanel topPanel) {
 		
 		topPanel.setPreferredSize(new Dimension(1000,100));
-		topPanel.setBackground(BSColor.trypanBlue);
-		
+		topPanel.setBackground(BSColor.trypanBlue);	
 		topPanel.add(Box.createHorizontalStrut(10));
 
 		
@@ -55,7 +54,7 @@ public class GameWindow extends JFrame {
 		topPanel.add(Box.createHorizontalStrut(170));
 		
 		JButton resetButton = setupButton(topPanel, "reset.png", "reset_hover.png", 48,48);
-	
+		resetButton.addActionListener(e -> bubbleShooter.reset());
 		
 		JButton paramButton = setupButton(topPanel, "gear.png", "gear_hover.png", 48,48);
 		
@@ -76,8 +75,8 @@ public class GameWindow extends JFrame {
 		
 		bottomPanel.add(loader);
 			
-		JLabel scoreLabel = new JLabel("Your Score : " + currentScore);
-		scoreLabel.setFont(new Font("Calibri", Font.BOLD, 24));
+		JLabel scoreLabel = new JLabel("YOUR SCORE : " + currentScore);
+		scoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
 		scoreLabel.setForeground(Color.WHITE);
 		bottomPanel.add(scoreLabel);
 		

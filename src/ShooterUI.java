@@ -21,6 +21,8 @@ public class ShooterUI {
 		//shooter.setMaximumSize(new Dimension(30,80));
 	}
 	
+	
+	
 	public void paint(Graphics2D pen, Shooter shooter) {
 		pen.setColor(Color.lightGray);
 		pen.rotate(Math.toRadians(90-shooter.getDegree()),335,100);

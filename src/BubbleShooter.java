@@ -31,16 +31,18 @@ public class BubbleShooter extends JPanel{
 	private void setupUI() {
 		this.setLayout(new BorderLayout());
 		mainPanel.setLayout(new BorderLayout());
-	
+		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		//this.setBackground(BSColor.blackCherry);
 		this.setupGrid();
 		this.setupShooter();
 		lPanel.setPreferredSize(new Dimension (1000,800));
 		lPanel.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
 		mainPanel.setBounds(0, 0,1000,515);
+		
 		animationPanel.setOpaque(false);
 		animationPanel.setBounds(0, 0,1000,515);
 		lPanel.add(animationPanel,1,JLayeredPane.PALETTE_LAYER);
+		
 		this.add(lPanel, BorderLayout.CENTER);
 		
 		
@@ -87,7 +89,7 @@ public class BubbleShooter extends JPanel{
 		        int initY = (int)(525-80*dy);
 				bubbleFired.setX(initX);
 				bubbleFired.setY(initY);
-				
+				bubbleFired.setFired(true);
 				animationPanel.setBubbleFired(bubbleFired);
 				animationPanel.repaint();
 				grid.setFireDegree(degree);
@@ -101,6 +103,12 @@ public class BubbleShooter extends JPanel{
 		shooterPanel.add(shooter);
 		mainPanel.add(shooterPanel,BorderLayout.SOUTH);
 		
+	}
+	
+	public void reset() {
+		grid.loadNewGrid();
+		shooter.reset();
+		loader.reset();
 	}
 	
 	private double getShooterDegree(MouseEvent e) {

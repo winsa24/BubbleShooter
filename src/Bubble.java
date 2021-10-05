@@ -1,14 +1,19 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Bubble {
 	private int index;
@@ -86,8 +91,38 @@ public boolean isFired() {
 		rh.put(RenderingHints.KEY_ANTIALIASING,
 		        RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setRenderingHints (rh);
-		g.setColor(color);
-		g.fillOval(x, y, r, r);
+		
+		/*if(isFired) {*/
+			g.setColor(color);
+			g.fillOval(x, y, r, r);
+		/*}
+		else {
+		if (color== Color.RED) {
+			Image img = getImage("red.png");
+			g.drawImage(img, x, y, r, r, null);
+		}
+		if (color== Color.ORANGE) {
+			Image img = getImage("orange.png");
+			g.drawImage(img, x, y, r, r, null);
+		}
+		if (color== Color.YELLOW) {
+			Image img = getImage("yellow.png");
+			g.drawImage(img, x, y, r, r, null);
+		}
+		if (color== Color.PINK) {
+			Image img = getImage("purple.png");
+			g.drawImage(img, x, y, r, r, null);
+		}
+		if (color== Color.GREEN) {
+			Image img = getImage("green.png");
+			g.drawImage(img, x, y, r, r, null);
+		}
+		if (color== Color.BLUE) {
+			Image img = getImage("blue.png");
+			g.drawImage(img, x, y, r, r, null);
+		}
+		}*/
+
 	}
 	
 	public boolean contains(Point p) {
@@ -100,7 +135,16 @@ public boolean isFired() {
 			return false;
 		}
 	}
-	
+	private Image getImage(String iconPath) {
+		try {
+			Image icon = ImageIO.read(getClass().getResource("data/"+iconPath));
+			icon = icon.getScaledInstance(r, r,  java.awt.Image.SCALE_SMOOTH);
+			return icon;
+		} catch (IOException e) {
+			System.out.println("Could not find icon");
+			return null;
+		}
+	}
 	
 	
 }

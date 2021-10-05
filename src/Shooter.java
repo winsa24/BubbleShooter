@@ -57,5 +57,8 @@ public class Shooter extends JComponent{
 		this.model.fireActionListener();
 	}
 	
-	
+	public void reset() {
+		this.degree=90;
+		repaint();
+	}
 }

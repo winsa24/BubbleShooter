@@ -45,6 +45,10 @@ public class Loader extends JPanel{
 			return bubble;
 		}
 	};
+	public void reset() {
+		bubblesInLoader.clear();
+		reload();
+	}
 	
 	@Override
 	public void paintComponent(Graphics g1d) {

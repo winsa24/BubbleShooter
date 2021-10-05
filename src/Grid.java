@@ -23,18 +23,7 @@ public class Grid extends JPanel{
 		
 		ui.setupUI(this);
 		
-		for(int i = 0; i < 200; i+= r) {
-			if(i/10%2 == 1) {
-				for(int j = 0; j < 600 - r; j+= r) {
-					this.add(new Bubble(j + r/2, i, r));
-				}
-			}	
-			else {
-				for(int j = 0; j < 600; j+= r) {
-					this.add(new Bubble(j, i, r));
-				}
-			}
-		}
+	    loadNewGrid();
 		
 		this.addMouseListener(new MouseAdapter() {
 			// Mouse handlers here
@@ -63,6 +52,23 @@ public class Grid extends JPanel{
 				
 			}
 		});
+	}
+	
+	public void loadNewGrid() {
+		bubbles.clear();
+		for(int i = 0; i < 200; i+= r) {
+			if(i/10%2 == 1) {
+				for(int j = 0; j < 600 - r; j+= r) {
+					this.add(new Bubble(j + r/2, i, r));
+				}
+			}	
+			else {
+				for(int j = 0; j < 600; j+= r) {
+					this.add(new Bubble(j, i, r));
+				}
+			}
+		}
+		repaint();
 	}
 	
 	public List<Bubble> getBubbles(){
