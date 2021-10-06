@@ -3,6 +3,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Grid extends JPanel{
 	private static int r = 30; //bubble size
@@ -35,8 +38,9 @@ public class Grid extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				Bubble hitb = addFireBubble(e.getPoint(), Color.PINK);
 				if(hitb != null) {
-					Bubble sb = model.isSelected(e.getPoint());
-					System.out.println("selected bubble:" + sb);
+//					Bubble sb = model.isSelected(e.getPoint());
+//					System.out.println("selected bubble:" + sb);
+					Bubble sb = hitb;
 					
 					List<Bubble> sbs = model.checkSurroundings(sb);
 					System.out.println("first round surrounding same color bubbles: " + sbs);
@@ -96,13 +100,44 @@ public class Grid extends JPanel{
 		bubbles.add(bubble);
 	}
 	public void elimate(List<Bubble> sbs) {
-		if(sbs.size() > 2) {
-			for(Bubble bubble: sbs) {
-				bubble.setColor(BSColor.blackCherry);
-			}
-			// repaint
-			this.repaint();
-		}
+		Timer timer = new Timer(1000/100,new ActionListener() {
+	        int currentFrame = 0;
+	        public void actionPerformed(ActionEvent e) {
+	        	
+	            if (currentFrame < 5) {
+	            	currentFrame++;
+	            	if(sbs.size() > 2) {
+		    			for(Bubble bubble: sbs) {
+		    				bubble.setX(bubble.getX() + 1);
+		    			}
+		    			// repaint
+		    			repaint();
+		    		}
+	            }
+	            else if(currentFrame >= 5 && currentFrame < 10) { 
+	            	currentFrame++;
+	            	if(sbs.size() > 2) {
+		    			for(Bubble bubble: sbs) {
+		    				bubble.setX(bubble.getX() - 1);
+		    			}
+		    			// repaint
+		    			repaint();
+		    		}
+	            }
+	            else {
+	            	((Timer)e.getSource()).stop();
+	        		if(sbs.size() > 2) {
+	        			for(Bubble bubble: sbs) {
+	        				bubble.setColor(BSColor.blackCherry);
+	        			}
+	        			// repaint
+	        			repaint();
+	        		}
+	            }
+	                
+	        }});
+		timer.start();
+		
 	}
 	
 	public Bubble addFireBubble(Point p, Color c) {
