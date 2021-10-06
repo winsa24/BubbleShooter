@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -29,30 +30,39 @@ public class Grid extends JPanel{
 			// Mouse handlers here
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Bubble sb = model.isSelected(e.getPoint());
-				System.out.println("selected bubble:" + sb);
-				
-				List<Bubble> sbs = model.checkSurroundings(sb);
-				System.out.println("first round surrounding same color bubbles: " + sbs);
-				
-				int size = sbs.size() - 1;
-				while(sbs.size() != size) {
-					size = sbs.size();
-					for(Bubble bubble: sbs) {
-						List<Bubble> newsbs = model.checkSurroundings(bubble);
-						System.out.println("new sbs: " + newsbs);
-//						sbs.removeAll(newsbs);
-//						sbs.addAll(newsbs);
-						
-						// combine two list without duplicate child
-						Set<Bubble> set = new HashSet<>(sbs);
-				        set.addAll(newsbs);
-				        sbs = new ArrayList<>(set);
+				Bubble hitb = addFireBubble(e.getPoint(), Color.PINK);
+				if(hitb != null) {
+					Bubble sb = model.isSelected(e.getPoint());
+					System.out.println("selected bubble:" + sb);
+					
+					List<Bubble> sbs = model.checkSurroundings(sb);
+					System.out.println("first round surrounding same color bubbles: " + sbs);
+					sbs.add(hitb);
+					
+					int size = sbs.size() - 1;
+					while(sbs.size() != size) {
+						size = sbs.size();
+						for(Bubble bubble: sbs) {
+							List<Bubble> newsbs = model.checkSurroundings(bubble);
+							System.out.println("new sbs: " + newsbs);
+//							sbs.removeAll(newsbs);
+//							sbs.addAll(newsbs);
+							
+							// combine two list without duplicate child
+							Set<Bubble> set = new HashSet<>(sbs);
+					        set.addAll(newsbs);
+					        sbs = new ArrayList<>(set);
+						}
+					}
+					System.out.println("final surroundings: " + sbs);
+					
+					if(hitb.getColor() == sbs.get(0).getColor()) {
+						elimate(sbs);
 					}
 				}
-				System.out.println("final surroundings: " + sbs);
 				
-				elimate(sbs);
+				
+				
 			}
 		});
 	}
@@ -92,6 +102,39 @@ public class Grid extends JPanel{
 		}
 	}
 	
+	public Bubble addFireBubble(Point p, Color c) {
+		System.out.println(">>>>");
+		System.out.println(p.getX() + ", " + p.getY());
+		Bubble hitBubble = null;
+		Bubble hittedBubble = null;
+		for(Bubble b: bubbles) {
+			if(b.contains(p) && b.getColor()!= BSColor.blackCherry ) {
+				hittedBubble = b;
+			}
+		}
+		
+		if(hittedBubble != null) {
+//			int fbx = (int)((hittedBubble.getX() -  (hittedBubble.getX() / r % 2) * r/2) / r) * r + r / 2;
+			int fbx = 0;
+			if(hittedBubble.getX() < 300) {
+				fbx = (int)(hittedBubble.getX() / r) * r + r / 2 + ((hittedBubble.getY() / r % 2) * r/2);
+			}else {
+				fbx = (int)(hittedBubble.getX() / r) * r - r / 2 - ((hittedBubble.getY() / r % 2) * r/2);
+			}
+			int fby = (int)(hittedBubble.getY() / r) * r + r;
+			System.out.println(">>>>");
+			System.out.println(fbx + ", " + fby);
+			System.out.println(">>>>");
+			
+//			int fbx = (int)(p.getX() / r) * r;
+//			int fby = (int)(p.getY() / r) * r;
+			hitBubble = new Bubble(fbx, fby, r, c);
+			bubbles.add(hitBubble);
+			this.repaint();
+		}
+		
+		return hitBubble;
+	}
 	
 	public double getFireDegree() {
 		return fireDegree;
