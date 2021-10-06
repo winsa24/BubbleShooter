@@ -66,6 +66,9 @@ public class Bubble {
 		return this.r;
 	}
 	
+	public void setColor(Color color) {
+		this.color = color;
+	}
 	public void setX(int x) {
 		this.x=x;
 	}

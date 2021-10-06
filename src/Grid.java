@@ -31,8 +31,10 @@ public class Grid extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				Bubble sb = model.isSelected(e.getPoint());
 				System.out.println("selected bubble:" + sb);
+				
 				List<Bubble> sbs = model.checkSurroundings(sb);
 				System.out.println("first round surrounding same color bubbles: " + sbs);
+				
 				int size = sbs.size() - 1;
 				while(sbs.size() != size) {
 					size = sbs.size();
@@ -50,10 +52,11 @@ public class Grid extends JPanel{
 				}
 				System.out.println("final surroundings: " + sbs);
 				
+				elimate(sbs);
 			}
 		});
 	}
-	
+
 	public void loadNewGrid() {
 		bubbles.clear();
 		for(int i = 0; i < 200; i+= r) {
@@ -70,6 +73,7 @@ public class Grid extends JPanel{
 		}
 		repaint();
 	}
+
 	
 	public List<Bubble> getBubbles(){
 		return this.bubbles;
@@ -78,6 +82,16 @@ public class Grid extends JPanel{
 	public void add(Bubble bubble) {
 		bubbles.add(bubble);
 	}
+	public void elimate(List<Bubble> sbs) {
+		if(sbs.size() > 2) {
+			for(Bubble bubble: sbs) {
+				bubble.setColor(BSColor.blackCherry);
+			}
+			// repaint
+			this.repaint();
+		}
+	}
+	
 	
 	public double getFireDegree() {
 		return fireDegree;
