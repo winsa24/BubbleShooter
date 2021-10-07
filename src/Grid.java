@@ -1,14 +1,10 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.Timer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -23,48 +19,7 @@ public class Grid extends JPanel{
 	public Grid() {
 		
 		ui.setupUI(this);
-		
 	    loadNewGrid();
-		
-		this.addMouseListener(new MouseAdapter() {
-			// Mouse handlers here
-			@Override 
-			public void mouseClicked(MouseEvent e) {
-				Bubble hitb = addFireBubble(e.getPoint(), Color.PINK);
-				if(hitb != null) {
-					Bubble sb = model.isSelected(e.getPoint());
-					System.out.println("selected bubble:" + sb);
-					
-					List<Bubble> sbs = model.checkSurroundings(sb);
-					System.out.println("first round surrounding same color bubbles: " + sbs);
-					sbs.add(hitb);
-					
-					int size = sbs.size() - 1;
-					while(sbs.size() != size) {
-						size = sbs.size();
-						for(Bubble bubble: sbs) {
-							List<Bubble> newsbs = model.checkSurroundings(bubble);
-							System.out.println("new sbs: " + newsbs);
-//							sbs.removeAll(newsbs);
-//							sbs.addAll(newsbs);
-							
-							// combine two list without duplicate child
-							Set<Bubble> set = new HashSet<>(sbs);
-					        set.addAll(newsbs);
-					        sbs = new ArrayList<>(set);
-						}
-					}
-					System.out.println("final surroundings: " + sbs);
-					
-					if(hitb.getColor() == sbs.get(0).getColor()) {
-						elimate(sbs);
-					}
-				}
-				 
-				
-				
-			}
-		});
 	}
 
 	public void loadNewGrid() {
@@ -93,13 +48,44 @@ public class Grid extends JPanel{
 		bubbles.add(bubble);
 	}
 	public void elimate(List<Bubble> sbs) {
-		if(sbs.size() > 2) {
-			for(Bubble bubble: sbs) {
-				bubble.setColor(BSColor.blackCherry);
-			}
-			// repaint
-			this.repaint();
-		}
+		Timer timer = new Timer(1000/100,new ActionListener() {
+	        int currentFrame = 0;
+	        public void actionPerformed(ActionEvent e) {
+
+	            if (currentFrame < 5) {
+	            	currentFrame++;
+	            	if(sbs.size() > 2) {
+		    			for(Bubble bubble: sbs) {
+		    				bubble.setX(bubble.getX() + 1);
+		    			}
+		    			// repaint
+		    			repaint();
+		    		}
+	            }
+	            else if(currentFrame >= 5 && currentFrame < 10) { 
+	            	currentFrame++;
+	            	if(sbs.size() > 2) {
+		    			for(Bubble bubble: sbs) {
+		    				bubble.setX(bubble.getX() - 1);
+		    			}
+		    			// repaint
+		    			repaint();
+		    		}
+	            }
+	            else {
+	            	((Timer)e.getSource()).stop();
+	        		if(sbs.size() > 2) {
+	        			for(Bubble bubble: sbs) {
+	        				bubble.setColor(BSColor.blackCherry);
+	        			}
+	        			// repaint
+	        			repaint();
+	        		}
+	            }
+
+	        }});
+		timer.start();
+
 	}
 	
 	public Bubble addFireBubble(Point p, Color c) {
@@ -130,6 +116,32 @@ public class Grid extends JPanel{
 //			int fby = (int)(p.getY() / r) * r;
 			hitBubble = new Bubble(fbx, fby, r, c);
 			bubbles.add(hitBubble);
+			
+			
+			List<Bubble> sbs = model.checkSurroundings(hitBubble);
+			System.out.println("first round surrounding same color bubbles: " + sbs);
+			sbs.add(hitBubble);
+			
+			int size = sbs.size() - 1;
+			while(sbs.size() != size) {
+				size = sbs.size();
+				for(Bubble bubble: sbs) {
+					List<Bubble> newsbs = model.checkSurroundings(bubble);
+					System.out.println("new sbs: " + newsbs);
+//					sbs.removeAll(newsbs);
+//					sbs.addAll(newsbs);
+					
+					// combine two list without duplicate child
+					Set<Bubble> set = new HashSet<>(sbs);
+			        set.addAll(newsbs);
+			        sbs = new ArrayList<>(set);
+				}
+			}
+			System.out.println("final surroundings: " + sbs);
+			
+			if(hitBubble.getColor() == sbs.get(0).getColor()) {
+				elimate(sbs);
+			}
 			this.repaint();
 		}
 		

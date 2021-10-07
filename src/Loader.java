@@ -47,7 +47,7 @@ public class Loader extends JPanel{
 	};
 	public void reset() {
 		bubblesInLoader.clear();
-		reload();
+		reload(); 
 	}
 	
 	@Override
