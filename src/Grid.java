@@ -28,7 +28,7 @@ public class Grid extends JPanel{
 		
 		this.addMouseListener(new MouseAdapter() {
 			// Mouse handlers here
-			@Override
+			@Override 
 			public void mouseClicked(MouseEvent e) {
 				Bubble hitb = addFireBubble(e.getPoint(), Color.PINK);
 				if(hitb != null) {
@@ -60,7 +60,7 @@ public class Grid extends JPanel{
 						elimate(sbs);
 					}
 				}
-				
+				 
 				
 				
 			}
@@ -76,7 +76,7 @@ public class Grid extends JPanel{
 				}
 			}	
 			else {
-				for(int j = 0; j < 600; j+= r) {
+				for(int j = 0; j < 600; j+= r) { 
 					this.add(new Bubble(j, i, r));
 				}
 			}
@@ -142,9 +142,29 @@ public class Grid extends JPanel{
 	public void setFireDegree(double Degree) {
 		this.fireDegree=Degree;
 	}
+	public Bubble getHitBubble(double degree) {
+		double dx=Math.cos(Math.toRadians(degree)) ;
+        double dy=Math.sin(Math.toRadians(degree)) ;
+        int initX = (int)(315+80*dx);
+        int initY = (int)(500-80*dy);
+		for (int i = bubbles.size()-1; i>0;--i) {
+			int bubbleY =bubbles.get(i).getY();
+			int x = (int) (((initY-bubbleY)/Math.tan(Math.toRadians(degree))) + initX);
+			System.out.println("x"+bubbles.get(i).getX());
+			System.out.println(x);
+			if(bubbles.get(i).contains(new Point(x,bubbleY))) {
+				System.out.println("found");
+				return bubbles.get(i);
+			}
+				
+		}
+		return bubbles.get(0);
+	}
 	
 	public void paintComponent(Graphics g1d) {
 		super.paintComponent(g1d);
 		this.ui.paint(g1d,this);
 	}
+	
+
 }
