@@ -23,6 +23,7 @@ public class Bubble {
 	private static Color[] bubbleColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.PINK, Color.ORANGE};
 	private boolean isFired;
 	private Color color;
+	private boolean isVisible = true;
 	private static Random random = new Random();
 	
 	public Bubble(int index, int x, int y, int r) {
@@ -78,7 +79,9 @@ public class Bubble {
 	public void setR(int r) {
 		this.r=r;
 	}
-
+	public void setVisible(boolean b) {
+		this.isVisible= b;
+	}
 	
 public boolean isFired() {
 		return isFired;
@@ -90,6 +93,7 @@ public boolean isFired() {
 
 	//	@Override
 	public void draw(Graphics2D g) {
+		if (isVisible) {
 		RenderingHints rh = g.getRenderingHints ();                  
 		rh.put(RenderingHints.KEY_ANTIALIASING,
 		        RenderingHints.VALUE_ANTIALIAS_ON);
@@ -125,18 +129,18 @@ public boolean isFired() {
 			g.drawImage(img, x, y, r, r, null);
 		}
 		}*/
-
+		}
 	}
 	
 	public boolean contains(Point p) {
 		double px = p.getX();
 		double py = p.getY();
-		if(px > this.x && px < this.x + this.r && py > this.y && py < this.y + this.r) {
+		if(px >= this.x && px <= this.x + this.r && py >= this.y && py <= this.y + this.r) {
 //			System.out.println(">>>>>" + p);
 			return true;
 		}else {
 			return false;
-		}
+		}  
 	}
 	private Image getImage(String iconPath) {
 		try {

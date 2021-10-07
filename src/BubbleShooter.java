@@ -94,6 +94,7 @@ public class BubbleShooter extends JPanel{
 				animationPanel.repaint();
 				grid.setFireDegree(degree);
 				
+				
 				playShootSound();
 				animateBubble(bubbleFired,100,400,initX,initY,shooter.getDegree());
 				System.out.println(bubbleFired.getColor()+" ball fired at " + shooter.getDegree());
@@ -124,14 +125,19 @@ public class BubbleShooter extends JPanel{
 	        public void actionPerformed(ActionEvent e) {
 	           double dx=Math.cos(Math.toRadians(degree)) ;
 	           double dy=Math.sin(Math.toRadians(degree)) ;
+	           Bubble bubbleHit = grid.getHitBubble(degree);
 	           bubbleFired.setX((int)(initX + 8*currentFrame*dx));  
 	           bubbleFired.setY((int)(initY - 8*currentFrame*dy));  
 	           animationPanel.repaint();
-	            if (currentFrame != maxFrames)
+	            if (currentFrame != maxFrames && bubbleFired.getY()>bubbleHit.getY()+15)
 	                currentFrame++;
 	            	
-	            else
+	            else {
 	                ((Timer)e.getSource()).stop();
+	                bubbleFired.setVisible(false);
+	                grid.addFireBubble(new Point(bubbleHit.getX(),bubbleHit.getY()), bubbleFired.getColor());
+					grid.repaint();
+	            }
 	        }});
 		timer.start();
 	}
@@ -144,7 +150,7 @@ public class BubbleShooter extends JPanel{
 	        clip.open(audioIn);
 	        clip.start();
 		} catch (UnsupportedAudioFileException e1) {
-			e1.printStackTrace();
+			e1.printStackTrace(); 
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}catch (LineUnavailableException e1) {

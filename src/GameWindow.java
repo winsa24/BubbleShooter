@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 
@@ -14,6 +15,7 @@ public class GameWindow extends JFrame {
 	private BubbleShooter bubbleShooter = new BubbleShooter(loader);
 	private JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,10,25));
 	private JPanel bottomPanel = new JPanel();
+	private Popup paramPopup;
 	private int currentScore;
 	
 	public GameWindow(String title) {
@@ -27,9 +29,11 @@ public class GameWindow extends JFrame {
 		this.setResizable(false);
 		this.getContentPane().setLayout(new BorderLayout());
 		
+		this.setupParam();
 		this.setupTop(topPanel);
 		this.setupMainPanel(bubbleShooter);
 		this.setupBottom(bottomPanel);
+		
 	
 		this.pack();
 		
@@ -57,6 +61,7 @@ public class GameWindow extends JFrame {
 		resetButton.addActionListener(e -> bubbleShooter.reset());
 		
 		JButton paramButton = setupButton(topPanel, "gear.png", "gear_hover.png", 48,48);
+		paramButton.addActionListener(e -> paramPopup.show());
 		
 		this.getContentPane().add(topPanel,BorderLayout.NORTH);
 	}
@@ -81,6 +86,18 @@ public class GameWindow extends JFrame {
 		bottomPanel.add(scoreLabel);
 		
 		this.getContentPane().add(bottomPanel,BorderLayout.SOUTH);
+	}
+	
+	private void setupParam() {
+		
+	        JPanel optionPanel = new JPanel();
+	        optionPanel.setBackground(BSColor.blackCherry);
+	        optionPanel.add(new JLabel("Option Menu"));
+	        optionPanel.setMinimumSize(new Dimension(400,500));
+	 
+	        this.paramPopup =  new PopupFactory().getPopup(this, optionPanel, 300, 200);
+	     
+	       
 	}
 	
 	private JButton setupButton(JPanel panel, String icon, String iconHover, int w, int h) {

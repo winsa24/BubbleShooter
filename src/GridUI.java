@@ -12,7 +12,7 @@ import javax.swing.BorderFactory;
 public class GridUI {
 	
 	public void setupUI(Grid grid) {
-		grid.setPreferredSize(new Dimension(600,300));
+		grid.setPreferredSize(new Dimension(600,300)); 
 		grid.setBackground(BSColor.blackCherry);
 		//grid.setBorder(BorderFactory.createLineBorder(BSColor.trypanBlue, 2));	
 		

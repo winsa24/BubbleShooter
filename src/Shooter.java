@@ -59,6 +59,6 @@ public class Shooter extends JComponent{
 	
 	public void reset() {
 		this.degree=90;
-		repaint();
+		repaint(); 
 	}
 }
