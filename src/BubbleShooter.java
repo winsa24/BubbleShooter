@@ -126,10 +126,11 @@ public class BubbleShooter extends JPanel{
 	           double dx=Math.cos(Math.toRadians(degree)) ;
 	           double dy=Math.sin(Math.toRadians(degree)) ;
 	           Bubble bubbleHit = grid.getHitBubble(degree);
+
 	           bubbleFired.setX((int)(initX + 8*currentFrame*dx));  
 	           bubbleFired.setY((int)(initY - 8*currentFrame*dy));  
 	           animationPanel.repaint();
-	            if (currentFrame != maxFrames && bubbleFired.getY()>bubbleHit.getY()+15)
+	            if (currentFrame != maxFrames && bubbleFired.getY()>bubbleHit.getY() + 1.5 * bubbleHit.getR() )
 	                currentFrame++;
 	            	
 	            else {

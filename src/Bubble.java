@@ -153,5 +153,9 @@ public boolean isFired() {
 		}
 	}
 	
+	public void delete(Bubble b) {
+		
+	}
+	
 	
 }

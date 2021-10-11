@@ -74,11 +74,24 @@ public class Grid extends JPanel{
 	            }
 	            else {
 	            	((Timer)e.getSource()).stop();
+	            	System.out.println("before: " + bubbles.size() + ", all:" + bubbles.get(0));
+	            	System.out.println("sbs size: " + sbs.size());
 	        		if(sbs.size() > 2) {
-	        			for(Bubble bubble: sbs) {
-	        				bubble.setColor(BSColor.blackCherry);
-	        			}
-	        			// repaint
+	        			// delete in sequence
+	        			bubbles.remove(bubbles.size() - 1);
+	        			for(int i = bubbles.size() - 2; i >= 0; i--)
+	        	        {
+	        	        	for(int j = sbs.size() - 1; j >= 0; j--) {
+	        					if(bubbles.get(i) == sbs.get(j)) {
+	        						bubbles.remove(i);
+	        					}
+	        				}
+	        	            
+	        	        }
+	        			System.out.println("after: " + bubbles.size() + "all:" + bubbles.get(0));
+//	        			for(Bubble bubble: sbs) {
+//	        				bubble.setColor(BSColor.blackCherry);
+//	        			}
 	        			repaint();
 	        		}
 	            }
@@ -89,8 +102,6 @@ public class Grid extends JPanel{
 	}
 	
 	public Bubble addFireBubble(Point p, Color c) {
-		System.out.println(">>>>");
-		System.out.println(p.getX() + ", " + p.getY());
 		Bubble hitBubble = null;
 		Bubble hittedBubble = null;
 		for(Bubble b: bubbles) {
@@ -100,7 +111,6 @@ public class Grid extends JPanel{
 		}
 		
 		if(hittedBubble != null) {
-//			int fbx = (int)((hittedBubble.getX() -  (hittedBubble.getX() / r % 2) * r/2) / r) * r + r / 2;
 			int fbx = 0;
 			if(hittedBubble.getX() < 300) {
 				fbx = (int)(hittedBubble.getX() / r) * r + r / 2 + ((hittedBubble.getY() / r % 2) * r/2);
@@ -108,26 +118,20 @@ public class Grid extends JPanel{
 				fbx = (int)(hittedBubble.getX() / r) * r - r / 2 - ((hittedBubble.getY() / r % 2) * r/2);
 			}
 			int fby = (int)(hittedBubble.getY() / r) * r + r;
-			System.out.println(">>>>");
-			System.out.println(fbx + ", " + fby);
-			System.out.println(">>>>");
-			
-//			int fbx = (int)(p.getX() / r) * r;
-//			int fby = (int)(p.getY() / r) * r;
+
 			hitBubble = new Bubble(fbx, fby, r, c);
 			bubbles.add(hitBubble);
 			
 			
 			List<Bubble> sbs = model.checkSurroundings(hitBubble);
-			System.out.println("first round surrounding same color bubbles: " + sbs);
-			sbs.add(hitBubble);
+//			System.out.println("first round surrounding same color bubbles: " + sbs);
 			
 			int size = sbs.size() - 1;
 			while(sbs.size() != size) {
 				size = sbs.size();
 				for(Bubble bubble: sbs) {
 					List<Bubble> newsbs = model.checkSurroundings(bubble);
-					System.out.println("new sbs: " + newsbs);
+//					System.out.println("new sbs: " + newsbs);
 //					sbs.removeAll(newsbs);
 //					sbs.addAll(newsbs);
 					
@@ -137,7 +141,7 @@ public class Grid extends JPanel{
 			        sbs = new ArrayList<>(set);
 				}
 			}
-			System.out.println("final surroundings: " + sbs);
+//			System.out.println("final surroundings: " + sbs);
 			
 			if(hitBubble.getColor() == sbs.get(0).getColor()) {
 				elimate(sbs);
@@ -163,7 +167,7 @@ public class Grid extends JPanel{
 			int bubbleY =bubbles.get(i).getY();
 			int x = (int) (((initY-bubbleY)/Math.tan(Math.toRadians(degree))) + initX);
 			System.out.println("x"+bubbles.get(i).getX());
-			System.out.println(x);
+			System.out.println(":>>>>:" + x);
 			if(bubbles.get(i).contains(new Point(x,bubbleY))) {
 				System.out.println("found");
 				return bubbles.get(i);
