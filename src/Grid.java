@@ -55,6 +55,11 @@ public class Grid extends JPanel{
 		
 	}
 	public boolean checkIsGameover() {
+		for (int i = bubbles.size() - 1; i > 0; i--) {
+			if((bubbles.get(i).getY() + bubbles.get(i).getR()) >= ui.getLineY()) {
+				return true;
+			}
+		}
 		return false;
 	}
 	

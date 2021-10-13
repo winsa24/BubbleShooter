@@ -143,7 +143,7 @@ public class BubbleShooter extends JPanel{
 	                ((Timer)e.getSource()).stop();
 	                bubbleFired.setVisible(false);
 	                window.setCurrentScore(grid.addFireBubble(bubbleHit, bubbleFired.getColor()));
-	                
+	                System.out.println("is game over? " + grid.checkIsGameover());
 					grid.repaint();
 	            }
 	        }});

@@ -12,6 +12,11 @@ import javax.swing.BorderFactory;
 
 
 public class GridUI {
+	private int lineY = 400;
+	
+	public int getLineY() {
+		return lineY;
+	}
 	
 	public void setupUI(Grid grid) {
 		grid.setPreferredSize(new Dimension(600,500)); 
@@ -29,7 +34,7 @@ public class GridUI {
 		}
 		g.setStroke(new BasicStroke(5));
 		g.setColor(Color.RED);
-        g.drawLine(0, 400, 600, 400);
+        g.drawLine(0, lineY, 600, lineY);
         
 		g.dispose();
 	}
