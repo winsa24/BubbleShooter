@@ -55,7 +55,7 @@ public class GameWindow extends JFrame {
 		title.setForeground(Color.WHITE);
 		topPanel.add(title);
 		
-		topPanel.add(Box.createHorizontalStrut(170));
+		topPanel.add(Box.createHorizontalStrut(150));
 		
 		JButton resetButton = setupButton(topPanel, "reset.png", "reset_hover.png", 48,48);
 		resetButton.addActionListener(e -> bubbleShooter.reset());
@@ -94,6 +94,7 @@ public class GameWindow extends JFrame {
 	        optionPanel.setBackground(BSColor.blackCherry);
 	        optionPanel.add(new JLabel("Option Menu"));
 	        optionPanel.setMinimumSize(new Dimension(400,500));
+	      //  JLabel optionLabel = (JLabel)
 	        JButton closeButton = (JButton) optionPanel.add(new JButton("x"));
 	        closeButton.addActionListener(e->{paramPopup.hide(); 
 	        this.paramPopup =  new PopupFactory().getPopup(this, optionPanel, 300, 200);});
