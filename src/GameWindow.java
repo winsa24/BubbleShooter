@@ -94,6 +94,9 @@ public class GameWindow extends JFrame {
 	        optionPanel.setBackground(BSColor.blackCherry);
 	        optionPanel.add(new JLabel("Option Menu"));
 	        optionPanel.setMinimumSize(new Dimension(400,500));
+	        JButton closeButton = (JButton) optionPanel.add(new JButton("x"));
+	        closeButton.addActionListener(e->{paramPopup.hide(); 
+	        this.paramPopup =  new PopupFactory().getPopup(this, optionPanel, 300, 200);});
 	 
 	        this.paramPopup =  new PopupFactory().getPopup(this, optionPanel, 300, 200);
 	     
