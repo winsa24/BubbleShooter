@@ -136,7 +136,8 @@ public class BubbleShooter extends JPanel{
 	            else {
 	                ((Timer)e.getSource()).stop();
 	                bubbleFired.setVisible(false);
-	                grid.addFireBubble(bubbleHit, bubbleFired.getColor());
+	                int score = grid.addFireBubble(bubbleHit, bubbleFired.getColor());
+	                System.out.println("score +" + score);
 					grid.repaint();
 	            }
 	        }});

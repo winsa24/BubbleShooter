@@ -98,7 +98,7 @@ public class Grid extends JPanel{
 
 	}
 	
-	public Bubble addFireBubble(Bubble hittedBubble, Color c) {
+	public Integer addFireBubble(Bubble hittedBubble, Color c) {
 		Bubble hitBubble = null;
 		
 		if(hittedBubble != null) {
@@ -130,13 +130,13 @@ public class Grid extends JPanel{
 			}
 //			System.out.println("final surroundings: " + sbs);
 			
-			if(hitBubble.getColor() == sbs.get(0).getColor()) {
+			if(sbs.size() > 2) {
 				elimate(sbs);
+				return sbs.size();
 			}
-			this.repaint();
 		}
 		
-		return hitBubble;
+		return 0;
 	}
 	
 	public double getFireDegree() {
