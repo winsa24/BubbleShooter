@@ -163,18 +163,19 @@ public class Grid extends JPanel{
         double dy=Math.sin(Math.toRadians(degree)) ;
         int initX = (int)(315+80*dx);
         int initY = (int)(500-80*dy);
+        Bubble hitBubble = new Bubble(2000,2000,r,r);
 		for (int i = bubbles.size()-1; i>0;--i) {
 			int bubbleY =bubbles.get(i).getY();
 			int x = (int) (((initY-bubbleY)/Math.tan(Math.toRadians(degree))) + initX);
 			System.out.println("x"+bubbles.get(i).getX());
 			System.out.println(":>>>>:" + x);
 			if(bubbles.get(i).contains(new Point(x,bubbleY))) {
-				System.out.println("found");
-				return bubbles.get(i);
+				if(bubbleY>hitBubble.getY()) 
+				hitBubble =  bubbles.get(i);
 			}
 				
 		}
-		return bubbles.get(0);
+		return hitBubble;
 	}
 	
 	public void paintComponent(Graphics g1d) {
