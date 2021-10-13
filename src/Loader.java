@@ -26,6 +26,7 @@ public class Loader extends JPanel{
 	public void reload() {
 		for(int i = 8; i <bubbleSize*5; i+= bubbleSize+3) {
 			bubblesInLoader.add(new Bubble(i, 5, bubbleSize));
+			
 		}
 		repaint();
 	};
@@ -45,6 +46,10 @@ public class Loader extends JPanel{
 			return bubble;
 		}
 	};
+	
+	public boolean isReloading() {
+		return(bubblesInLoader.size()==5); 
+	}
 	public void reset() {
 		bubblesInLoader.clear();
 		reload(); 

@@ -15,6 +15,7 @@ import javax.swing.*;
 
 public class BubbleShooter extends JPanel{
 	
+	private GameWindow window;
     private JLayeredPane lPanel = new JLayeredPane();
     private AnimPanel animationPanel = new AnimPanel();
     private JPanel mainPanel = new JPanel();
@@ -23,7 +24,8 @@ public class BubbleShooter extends JPanel{
 	private Loader loader;
 	
 	
-	public BubbleShooter(Loader loader) {
+	public BubbleShooter(GameWindow window, Loader loader) {
+		this.window= window;
 		this.loader= loader;
 		this.setupUI();
 		}
@@ -82,6 +84,9 @@ public class BubbleShooter extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				
 				Bubble bubbleFired  = loader.fire();
+				if(loader.isReloading()) {
+					//grid.newBubbleLine();
+				}
 				double degree= shooter.getDegree();
 				double dx= Math.cos(Math.toRadians(degree)) ;
 		        double dy= Math.sin(Math.toRadians(degree)) ;
@@ -96,7 +101,7 @@ public class BubbleShooter extends JPanel{
 				
 				
 				playShootSound();
-				animateBubble(bubbleFired,100,400,initX,initY,shooter.getDegree());
+				animateBubble(bubbleFired,200,400,initX,initY,shooter.getDegree());
 				System.out.println(bubbleFired.getColor()+" ball fired at " + shooter.getDegree());
 			}
 		});
@@ -118,7 +123,8 @@ public class BubbleShooter extends JPanel{
 		double y = -e.getY()+this.getHeight()+27;
 		return Math.atan2(y,x)* 180 / Math.PI;
 	}
-	
+
+
 	private void animateBubble(Bubble bubbleFired, int framesPerSec,int maxFrames,int initX, int initY, double degree) {
 		Timer timer = new Timer(1000/framesPerSec,new ActionListener() {
 	        int currentFrame = 0;
@@ -127,8 +133,8 @@ public class BubbleShooter extends JPanel{
 	           double dy=Math.sin(Math.toRadians(degree)) ;
 	           Bubble bubbleHit = grid.getHitBubble(degree);
 
-	           bubbleFired.setX((int)(initX + 8*currentFrame*dx));  
-	           bubbleFired.setY((int)(initY - 8*currentFrame*dy));  
+	           bubbleFired.setX((int)(initX + 12*currentFrame*dx));  
+	           bubbleFired.setY((int)(initY - 12*currentFrame*dy));  
 	           animationPanel.repaint();
 	            if (currentFrame != maxFrames && bubbleFired.getY()>bubbleHit.getY() + 1.5 * bubbleHit.getR() )
 	                currentFrame++;
@@ -136,8 +142,8 @@ public class BubbleShooter extends JPanel{
 	            else {
 	                ((Timer)e.getSource()).stop();
 	                bubbleFired.setVisible(false);
-	                int score = grid.addFireBubble(bubbleHit, bubbleFired.getColor());
-	                System.out.println("score +" + score);
+	                window.setCurrentScore(grid.addFireBubble(bubbleHit, bubbleFired.getColor()));
+	                
 					grid.repaint();
 	            }
 	        }});

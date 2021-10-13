@@ -12,11 +12,13 @@ import javax.swing.*;
 public class GameWindow extends JFrame {
 	
 	private Loader loader = new Loader();
-	private BubbleShooter bubbleShooter = new BubbleShooter(loader);
+	private BubbleShooter bubbleShooter = new BubbleShooter(this,loader);
 	private JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,10,25));
 	private JPanel bottomPanel = new JPanel();
 	private Popup paramPopup;
 	private int currentScore;
+	JLabel scoreLabel = new JLabel("YOUR SCORE : " + currentScore);
+	private int soundVolume=-4;
 	
 	public GameWindow(String title) {
 		super(title);
@@ -80,7 +82,7 @@ public class GameWindow extends JFrame {
 		
 		bottomPanel.add(loader);
 			
-		JLabel scoreLabel = new JLabel("YOUR SCORE : " + currentScore);
+		
 		scoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
 		scoreLabel.setForeground(Color.WHITE);
 		bottomPanel.add(scoreLabel);
@@ -91,18 +93,46 @@ public class GameWindow extends JFrame {
 	private void setupParam() {
 		
 	        JPanel optionPanel = new JPanel();
-	        optionPanel.setBackground(BSColor.blackCherry);
-	        optionPanel.add(new JLabel("Option Menu"));
-	        optionPanel.setMinimumSize(new Dimension(400,500));
-	      //  JLabel optionLabel = (JLabel)
-	        JButton closeButton = (JButton) optionPanel.add(new JButton("x"));
+	        optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.Y_AXIS));
+	        optionPanel.setBorder(BorderFactory.createLineBorder(BSColor.blackCherry2, 5, true));
+	        
+	        JPanel optionMenuBar = new JPanel(new FlowLayout());
+	        optionMenuBar.setBackground(BSColor.blackCherry2);
+	        
+	        optionMenuBar.add(Box.createHorizontalStrut(170));
+	        JLabel optionLabel = (JLabel) optionMenuBar.add(new JLabel("Option Menu"));
+	        optionLabel.setForeground(Color.WHITE);
+	        optionLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 18));
+	        optionMenuBar.add(Box.createHorizontalStrut(130));
+	        JButton closeButton = (JButton) optionMenuBar.add(new JButton("X"));
 	        closeButton.addActionListener(e->{paramPopup.hide(); 
 	        this.paramPopup =  new PopupFactory().getPopup(this, optionPanel, 300, 200);});
-	 
+	        optionPanel.add(optionMenuBar);
+	        
+	        JPanel settingPanel =new JPanel();
+	        GroupLayout layout = new GroupLayout(settingPanel);
+	        layout.setAutoCreateGaps(true);
+	        layout.setAutoCreateContainerGaps(true);
+	        settingPanel.setBackground(BSColor.trypanBlue);
+	        setupVolumParam(settingPanel);
+	        
+	        
+	        optionPanel.add(settingPanel);
 	        this.paramPopup =  new PopupFactory().getPopup(this, optionPanel, 300, 200);
 	     
 	       
 	}
+	
+	private void setupVolumParam(JPanel settingPanel) {
+		settingPanel.add(Box.createVerticalStrut(50));
+		JLabel volumeLabel = (JLabel) settingPanel.add(new JLabel("Sound Volume :"));
+        volumeLabel.setForeground(Color.WHITE);
+        volumeLabel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+        JSlider volumeSlider =(JSlider) settingPanel.add(new JSlider(-14,6,soundVolume));
+        volumeSlider.setBackground(null);
+        volumeSlider.addChangeListener(e->soundVolume=(int)((JSlider)e.getSource()).getValue());
+	}
+	
 	
 	private JButton setupButton(JPanel panel, String icon, String iconHover, int w, int h) {
 		ImageIcon iconImg = getIcon(icon,w,h);
@@ -142,6 +172,8 @@ public class GameWindow extends JFrame {
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(audio);
 			Clip clip = AudioSystem.getClip();
 	        clip.open(audioIn);
+	        FloatControl gainControl =  (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+	        gainControl.setValue((float)soundVolume); 
 	        clip.start();
 		} catch (UnsupportedAudioFileException e1) {
 			e1.printStackTrace();
@@ -151,5 +183,16 @@ public class GameWindow extends JFrame {
 			e1.printStackTrace();
 		}
 	}
-
+	
+	public void setCurrentScore(int score) {
+		this.currentScore+=calculateScore(score);
+		scoreLabel.setText("YOUR SCORE : " + currentScore);
+	}
+	
+	private int calculateScore(int score) {
+		if (score>0) {
+		return 30+20*(score-3);
+		}
+		else return 0;
+	}
 }
