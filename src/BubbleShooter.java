@@ -85,7 +85,7 @@ public class BubbleShooter extends JPanel{
 				
 				Bubble bubbleFired  = loader.fire();
 				if(loader.isReloading()) {
-					//grid.newBubbleLine();
+					grid.newBubbleLine();
 				}
 				double degree= shooter.getDegree();
 				double dx= Math.cos(Math.toRadians(degree)) ;

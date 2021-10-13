@@ -1,3 +1,5 @@
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,10 +14,8 @@ import javax.swing.BorderFactory;
 public class GridUI {
 	
 	public void setupUI(Grid grid) {
-		grid.setPreferredSize(new Dimension(600,300)); 
-		grid.setBackground(BSColor.blackCherry);
-		//grid.setBorder(BorderFactory.createLineBorder(BSColor.trypanBlue, 2));	
-		
+		grid.setPreferredSize(new Dimension(600,500)); 
+		grid.setBackground(BSColor.blackCherry);		
 	}
 
 	public void paint(Graphics g1d, Grid grid) {
@@ -27,6 +27,10 @@ public class GridUI {
 		for (Bubble drawable : bubbles) {
 			drawable.draw(g);
 		}
+		g.setStroke(new BasicStroke(5));
+		g.setColor(Color.RED);
+        g.drawLine(0, 400, 600, 400);
+        
 		g.dispose();
 	}
 	

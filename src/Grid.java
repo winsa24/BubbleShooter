@@ -39,6 +39,24 @@ public class Grid extends JPanel{
 		repaint();
 	}
 
+	public void newBubbleLine() {
+		for(Bubble b: bubbles) {
+			b.setY(b.getY() + b.getR());
+		}
+		if((bubbles.get(0).getX() / (r/2) % 2) == 0) {
+			for(int j = 0; j < 600 - r; j+= r) {
+				bubbles.add(0, new Bubble(j + r/2, 0, r));
+			}
+		}else {
+			for(int j = 0; j < 600 - r; j+= r) {
+				bubbles.add(0, new Bubble(j, 0, r));
+			}
+		}
+		
+	}
+	public boolean checkIsGameover() {
+		return false;
+	}
 	
 	public List<Bubble> getBubbles(){
 		return this.bubbles;
@@ -89,6 +107,7 @@ public class Grid extends JPanel{
 	        	            
 	        	        }
 	        			System.out.println("after: " + bubbles.size() + "all:" + bubbles.get(0));
+//	        			newBubbleLine();
 	        			repaint();
 	        		}
 	            }
@@ -104,9 +123,9 @@ public class Grid extends JPanel{
 		if(hittedBubble != null) {
 			int fbx = 0;
 			if(hittedBubble.getX() < 300) {
-				fbx = (int)(hittedBubble.getX() / r) * r + r / 2 + ((hittedBubble.getY() / r % 2) * r/2);
+				fbx = (int)(hittedBubble.getX() / r) * r + r / 2 + ((hittedBubble.getX() / (r/2) % 2) * r/2);
 			}else {
-				fbx = (int)(hittedBubble.getX() / r) * r - r / 2 + ((hittedBubble.getY() / r % 2) * r/2);
+				fbx = (int)(hittedBubble.getX() / r) * r - r / 2 + ((hittedBubble.getX() / (r/2) % 2) * r/2);
 			}
 			int fby = (int)(hittedBubble.getY() / r) * r + r;
 
@@ -154,8 +173,6 @@ public class Grid extends JPanel{
 		for (int i = bubbles.size()-1; i>0;--i) {
 			int bubbleY =bubbles.get(i).getY();
 			int x = (int) (((initY-bubbleY)/Math.tan(Math.toRadians(degree))) + initX);
-			System.out.println("x"+bubbles.get(i).getX());
-			System.out.println(":>>>>:" + x);
 			if(bubbles.get(i).contains(new Point(x,bubbleY))) {
 				if(bubbleY>hitBubble.getY()) 
 				hitBubble =  bubbles.get(i);
