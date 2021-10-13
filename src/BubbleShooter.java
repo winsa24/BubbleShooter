@@ -136,7 +136,7 @@ public class BubbleShooter extends JPanel{
 	            else {
 	                ((Timer)e.getSource()).stop();
 	                bubbleFired.setVisible(false);
-	                grid.addFireBubble(new Point(bubbleHit.getX(),bubbleHit.getY()), bubbleFired.getColor());
+	                grid.addFireBubble(bubbleHit, bubbleFired.getColor());
 					grid.repaint();
 	            }
 	        }});

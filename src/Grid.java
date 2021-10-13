@@ -89,9 +89,6 @@ public class Grid extends JPanel{
 	        	            
 	        	        }
 	        			System.out.println("after: " + bubbles.size() + "all:" + bubbles.get(0));
-//	        			for(Bubble bubble: sbs) {
-//	        				bubble.setColor(BSColor.blackCherry);
-//	        			}
 	        			repaint();
 	        		}
 	            }
@@ -101,21 +98,15 @@ public class Grid extends JPanel{
 
 	}
 	
-	public Bubble addFireBubble(Point p, Color c) {
+	public Bubble addFireBubble(Bubble hittedBubble, Color c) {
 		Bubble hitBubble = null;
-		Bubble hittedBubble = null;
-		for(Bubble b: bubbles) {
-			if(b.contains(p) && b.getColor()!= BSColor.blackCherry ) {
-				hittedBubble = b;
-			}
-		}
 		
 		if(hittedBubble != null) {
 			int fbx = 0;
 			if(hittedBubble.getX() < 300) {
 				fbx = (int)(hittedBubble.getX() / r) * r + r / 2 + ((hittedBubble.getY() / r % 2) * r/2);
 			}else {
-				fbx = (int)(hittedBubble.getX() / r) * r - r / 2 - ((hittedBubble.getY() / r % 2) * r/2);
+				fbx = (int)(hittedBubble.getX() / r) * r - r / 2 + ((hittedBubble.getY() / r % 2) * r/2);
 			}
 			int fby = (int)(hittedBubble.getY() / r) * r + r;
 
@@ -130,11 +121,7 @@ public class Grid extends JPanel{
 			while(sbs.size() != size) {
 				size = sbs.size();
 				for(Bubble bubble: sbs) {
-					List<Bubble> newsbs = model.checkSurroundings(bubble);
-//					System.out.println("new sbs: " + newsbs);
-//					sbs.removeAll(newsbs);
-//					sbs.addAll(newsbs);
-					
+					List<Bubble> newsbs = model.checkSurroundings(bubble);					
 					// combine two list without duplicate child
 					Set<Bubble> set = new HashSet<>(sbs);
 			        set.addAll(newsbs);
