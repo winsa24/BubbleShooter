@@ -11,15 +11,17 @@ import javax.swing.*;
 
 public class GameWindow extends JFrame {
 	
+	public static int soundVolume=-4;
 	private Loader loader = new Loader();
 	private BubbleShooter bubbleShooter = new BubbleShooter(this,loader);
 	private JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,10,25));
 	private JPanel bottomPanel = new JPanel();
+	private JPanel gameOverPanel = new JPanel();
 	private Popup paramPopup;
 	private Popup gameOverPopup;
 	private int currentScore;
-	JLabel scoreLabel = new JLabel("YOUR SCORE : " + currentScore);
-	private int soundVolume=-4;
+	private JLabel yourScoreLabel = new JLabel("YOUR SCORE : " + currentScore);
+	private JLabel scoreLabel = new JLabel("YOUR SCORE : " + currentScore);
 	
 	public GameWindow(String title) {
 		super(title);
@@ -62,7 +64,13 @@ public class GameWindow extends JFrame {
 		topPanel.add(Box.createHorizontalStrut(150));
 		
 		JButton resetButton = setupButton(topPanel, "reset.png", "reset_hover.png", 48,48);
-		resetButton.addActionListener(e -> bubbleShooter.reset());
+		resetButton.addActionListener(e -> {bubbleShooter.reset();
+		gameOverPopup.hide(); 
+        this.gameOverPopup =  new PopupFactory().getPopup(this, gameOverPanel, 300, 200);
+        bubbleShooter.setGamePaused(false);
+        currentScore=0;
+        repaint();
+		});
 		
 		JButton paramButton = setupButton(topPanel, "gear.png", "gear_hover.png", 48,48);
 		paramButton.addActionListener(e -> paramPopup.show());
@@ -136,7 +144,6 @@ public class GameWindow extends JFrame {
 	}
 	
 	public void setupGameOver() {
-		 JPanel gameOverPanel = new JPanel();
 	     gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.Y_AXIS));
 	     gameOverPanel.setBorder(BorderFactory.createLineBorder(BSColor.blackCherry2, 5, true));
 	     gameOverPanel.setBackground(BSColor.trypanBlue);
@@ -144,6 +151,7 @@ public class GameWindow extends JFrame {
 	     JLabel gameOverLabel = (JLabel) gameOverPanel.add(new JLabel("GAME OVER"));
 	     gameOverLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 40));
 	     gameOverLabel.setForeground(Color.WHITE);
+	     
 	     this.gameOverPopup =  new PopupFactory().getPopup(this, gameOverPanel, 300, 200);
 	}
 	
@@ -178,6 +186,15 @@ public class GameWindow extends JFrame {
 			System.out.println("Could not find icon");
 			return null;
 		}
+	}
+	
+	public void displayGameOver() {
+		  
+	    yourScoreLabel.setText("Your Score : " + currentScore);
+	    yourScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+	    yourScoreLabel.setForeground(Color.WHITE);
+		gameOverPanel.add(yourScoreLabel);
+		gameOverPopup.show();
 	}
 	
 	private void playHoverSound() {

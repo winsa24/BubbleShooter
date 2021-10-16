@@ -9,6 +9,7 @@ import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class BubbleShooter extends JPanel{
 	private Grid grid = new Grid();
 	private Shooter shooter = new Shooter(this);
 	private Loader loader;
+	private boolean isGamePaused = false;
 	
 	
 	public BubbleShooter(GameWindow window, Loader loader) {
@@ -82,27 +84,26 @@ public class BubbleShooter extends JPanel{
 		shooter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				Bubble bubbleFired  = loader.fire();
-				if(loader.isReloading()) {
-					grid.newBubbleLine();
+				if(!isGamePaused()) {
+					setGamePaused(true);
+					Bubble bubbleFired  = loader.fire();
+					if(loader.isReloading()) {
+						grid.newBubbleLine();
+					}
+					double degree= shooter.getDegree();
+					double dx= Math.cos(Math.toRadians(degree)) ;
+					double dy= Math.sin(Math.toRadians(degree)) ;
+					int initX = (int)(500+80*dx);
+					int initY = (int)(525-80*dy);
+					bubbleFired.setX(initX);
+					bubbleFired.setY(initY);
+					bubbleFired.setFired(true);
+					animationPanel.setBubbleFired(bubbleFired);
+					animationPanel.repaint();
+					grid.setFireDegree(degree);
+					playSound("shoot.wav");
+					animateBubble(bubbleFired,200,400,initX,initY,shooter.getDegree());
 				}
-				double degree= shooter.getDegree();
-				double dx= Math.cos(Math.toRadians(degree)) ;
-		        double dy= Math.sin(Math.toRadians(degree)) ;
-		        int initX = (int)(500+80*dx);
-		        int initY = (int)(525-80*dy);
-				bubbleFired.setX(initX);
-				bubbleFired.setY(initY);
-				bubbleFired.setFired(true);
-				animationPanel.setBubbleFired(bubbleFired);
-				animationPanel.repaint();
-				grid.setFireDegree(degree);
-				
-				
-				playSound("shoot.wav");
-				animateBubble(bubbleFired,200,400,initX,initY,shooter.getDegree());
-				System.out.println(bubbleFired.getColor()+" ball fired at " + shooter.getDegree());
 			}
 		});
 		
@@ -125,6 +126,14 @@ public class BubbleShooter extends JPanel{
 	}
 
 
+	private boolean isGamePaused() {
+		return isGamePaused;
+	}
+
+	public void setGamePaused(boolean isGamePaused) {
+		this.isGamePaused = isGamePaused;
+	}
+
 	private void animateBubble(Bubble bubbleFired, int framesPerSec,int maxFrames,int initX, int initY, double degree) {
 		Timer timer = new Timer(1000/framesPerSec,new ActionListener() {
 	        int currentFrame = 0;
@@ -141,26 +150,38 @@ public class BubbleShooter extends JPanel{
 	            	
 	            else {
 	                ((Timer)e.getSource()).stop();
-	                bubbleFired.setVisible(false);
-	                int previousScore = window.getScore();
-	                window.setCurrentScore(grid.addFireBubble(bubbleHit, bubbleFired.getColor()));
-	                if(previousScore == window.getScore()) {
-	                	playSound("lock.wav");
-	                }
-	                else {playSound("pop.wav");}
-	              //  System.out.println("is game over? " + grid.checkIsGameover());
-					grid.repaint();
+	                registerHit(bubbleFired,bubbleHit);
 	            }
 	        }});
 		timer.start();
 	}
 	
+	private void registerHit(Bubble bubbleFired,Bubble bubbleHit) {
+		bubbleFired.setVisible(false);
+        int previousScore = window.getScore();
+        window.setCurrentScore(grid.addFireBubble(bubbleHit, bubbleFired.getColor()));
+        if(previousScore == window.getScore()) {
+        	playSound("lock.wav");
+        }
+        else {playSound("pop.wav");}
+      //  System.out.println("is game over? " + grid.checkIsGameover());
+		grid.repaint();
+		setGamePaused(false);
+		if(grid.checkIsGameover()) {
+			window.displayGameOver();
+			playSound("gameover.wav");
+			setGamePaused(true);
+		}
+		
+	}
 	private void playSound(String sound) {
 		 URL audio= this.getClass().getClassLoader().getResource("data/"+sound);
         try {
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(audio);
 			Clip clip = AudioSystem.getClip();
 	        clip.open(audioIn);
+	        FloatControl gainControl =  (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+	        gainControl.setValue((float)GameWindow.soundVolume); 
 	        clip.start();
 		} catch (UnsupportedAudioFileException e1) {
 			e1.printStackTrace(); 
@@ -171,6 +192,7 @@ public class BubbleShooter extends JPanel{
 		}
 	}
 
+	
 	
 	
 }
