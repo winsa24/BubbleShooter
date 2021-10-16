@@ -100,7 +100,7 @@ public class BubbleShooter extends JPanel{
 				grid.setFireDegree(degree);
 				
 				
-				playShootSound();
+				playSound("shoot.wav");
 				animateBubble(bubbleFired,200,400,initX,initY,shooter.getDegree());
 				System.out.println(bubbleFired.getColor()+" ball fired at " + shooter.getDegree());
 			}
@@ -142,16 +142,21 @@ public class BubbleShooter extends JPanel{
 	            else {
 	                ((Timer)e.getSource()).stop();
 	                bubbleFired.setVisible(false);
+	                int previousScore = window.getScore();
 	                window.setCurrentScore(grid.addFireBubble(bubbleHit, bubbleFired.getColor()));
-	                System.out.println("is game over? " + grid.checkIsGameover());
+	                if(previousScore == window.getScore()) {
+	                	playSound("lock.wav");
+	                }
+	                else {playSound("pop.wav");}
+	              //  System.out.println("is game over? " + grid.checkIsGameover());
 					grid.repaint();
 	            }
 	        }});
 		timer.start();
 	}
 	
-	private void playShootSound() {
-		 URL audio= this.getClass().getClassLoader().getResource("data/shoot.wav");
+	private void playSound(String sound) {
+		 URL audio= this.getClass().getClassLoader().getResource("data/"+sound);
         try {
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(audio);
 			Clip clip = AudioSystem.getClip();
@@ -165,6 +170,7 @@ public class BubbleShooter extends JPanel{
 			e1.printStackTrace();
 		}
 	}
+
 	
 	
 }

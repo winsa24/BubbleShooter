@@ -16,6 +16,7 @@ public class GameWindow extends JFrame {
 	private JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,10,25));
 	private JPanel bottomPanel = new JPanel();
 	private Popup paramPopup;
+	private Popup gameOverPopup;
 	private int currentScore;
 	JLabel scoreLabel = new JLabel("YOUR SCORE : " + currentScore);
 	private int soundVolume=-4;
@@ -32,6 +33,7 @@ public class GameWindow extends JFrame {
 		this.getContentPane().setLayout(new BorderLayout());
 		
 		this.setupParam();
+		this.setupGameOver();
 		this.setupTop(topPanel);
 		this.setupMainPanel(bubbleShooter);
 		this.setupBottom(bottomPanel);
@@ -49,7 +51,7 @@ public class GameWindow extends JFrame {
 
 		
 		JButton backButton = setupButton(topPanel, "return.png", "return_hover.png", 48,48);
-		
+		backButton.addActionListener(e -> gameOverPopup.show());
 		topPanel.add(Box.createHorizontalStrut(250));
 		
 		JLabel title = new JLabel("Happy Bubble Shooter");
@@ -133,6 +135,18 @@ public class GameWindow extends JFrame {
         volumeSlider.addChangeListener(e->soundVolume=(int)((JSlider)e.getSource()).getValue());
 	}
 	
+	public void setupGameOver() {
+		 JPanel gameOverPanel = new JPanel();
+	     gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.Y_AXIS));
+	     gameOverPanel.setBorder(BorderFactory.createLineBorder(BSColor.blackCherry2, 5, true));
+	     gameOverPanel.setBackground(BSColor.trypanBlue);
+	     
+	     JLabel gameOverLabel = (JLabel) gameOverPanel.add(new JLabel("GAME OVER"));
+	     gameOverLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 40));
+	     gameOverLabel.setForeground(Color.WHITE);
+	     this.gameOverPopup =  new PopupFactory().getPopup(this, gameOverPanel, 300, 200);
+	}
+	
 	
 	private JButton setupButton(JPanel panel, String icon, String iconHover, int w, int h) {
 		ImageIcon iconImg = getIcon(icon,w,h);
@@ -187,6 +201,10 @@ public class GameWindow extends JFrame {
 	public void setCurrentScore(int score) {
 		this.currentScore+=calculateScore(score);
 		scoreLabel.setText("YOUR SCORE : " + currentScore);
+	}
+	
+	public int getScore() {
+		return this.currentScore;
 	}
 	
 	private int calculateScore(int score) {
