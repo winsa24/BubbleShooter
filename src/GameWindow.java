@@ -1,6 +1,18 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -20,6 +32,7 @@ public class GameWindow extends JFrame {
 	private Popup paramPopup;
 	private Popup gameOverPopup;
 	private int currentScore;
+	private int highScore = 1000;
 	private JLabel yourScoreLabel = new JLabel("YOUR SCORE : " + currentScore);
 	private JLabel scoreLabel = new JLabel("YOUR SCORE : " + currentScore);
 	
@@ -53,7 +66,7 @@ public class GameWindow extends JFrame {
 
 		
 		JButton backButton = setupButton(topPanel, "return.png", "return_hover.png", 48,48);
-		backButton.addActionListener(e -> gameOverPopup.show());
+		backButton.addActionListener(e -> System.exit(0));
 		topPanel.add(Box.createHorizontalStrut(250));
 		
 		JLabel title = new JLabel("Happy Bubble Shooter");
@@ -66,7 +79,7 @@ public class GameWindow extends JFrame {
 		JButton resetButton = setupButton(topPanel, "reset.png", "reset_hover.png", 48,48);
 		resetButton.addActionListener(e -> {bubbleShooter.reset();
 		gameOverPopup.hide(); 
-        this.gameOverPopup =  new PopupFactory().getPopup(this, gameOverPanel, 300, 200);
+        this.gameOverPopup =  new PopupFactory().getPopup(this, gameOverPanel, 350, 250);
         bubbleShooter.setGamePaused(false);
         currentScore=0;
         repaint();
@@ -148,11 +161,20 @@ public class GameWindow extends JFrame {
 	     gameOverPanel.setBorder(BorderFactory.createLineBorder(BSColor.blackCherry2, 5, true));
 	     gameOverPanel.setBackground(BSColor.trypanBlue);
 	     
-	     JLabel gameOverLabel = (JLabel) gameOverPanel.add(new JLabel("GAME OVER"));
+	     JLabel gameOverLabel = (JLabel) gameOverPanel.add(new JLabel("    GAME OVER!    "));
 	     gameOverLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 40));
 	     gameOverLabel.setForeground(Color.WHITE);
 	     
-	     this.gameOverPopup =  new PopupFactory().getPopup(this, gameOverPanel, 300, 200);
+	     gameOverPanel.add(Box.createVerticalStrut(50));
+	     InputStream inputStream = this.getClass().getResourceAsStream("data/highscore.txt");
+	     try {
+			highScore = Integer.valueOf(readFromInputStream(inputStream));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			System.out.println("High score file not found");
+		}   
+	    
+	     this.gameOverPopup =  new PopupFactory().getPopup(this, gameOverPanel, 350, 250);
 	}
 	
 	
@@ -194,6 +216,33 @@ public class GameWindow extends JFrame {
 	    yourScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 	    yourScoreLabel.setForeground(Color.WHITE);
 		gameOverPanel.add(yourScoreLabel);
+		
+		JLabel highScoreLabel = (JLabel) gameOverPanel.add(new JLabel("High Score : " + highScore));
+	    highScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+	    highScoreLabel.setForeground(Color.WHITE);
+		if(currentScore>= highScore) {
+			highScoreLabel.setText("High Score : " +  currentScore);
+			JLabel newHighScoreLabel = (JLabel) gameOverPanel.add(new JLabel("New highscore !"));
+			newHighScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 16));
+			newHighScoreLabel.setForeground(Color.WHITE);
+			
+			
+			URL url = this.getClass().getClassLoader().getResource("data/highscore.txt");
+			URI uri;
+			try {
+				uri = new URI(url.toString());
+				File file = new File(uri.getPath());
+				System.out.println("File Found : " + file.exists());
+				FileWriter writer = new FileWriter(file, false);
+				writer.write(String.valueOf(currentScore));
+				writer.close();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+		
+		}
 		gameOverPopup.show();
 	}
 	
@@ -230,4 +279,18 @@ public class GameWindow extends JFrame {
 		}
 		else return 0;
 	}
+	private String readFromInputStream(InputStream inputStream)        
+			  throws IOException {
+			    StringBuilder resultStringBuilder = new StringBuilder();
+			    try (BufferedReader br
+			      = new BufferedReader(new InputStreamReader(inputStream))) {
+			        String line;
+			        while ((line = br.readLine()) != null) {
+			            resultStringBuilder.append(line);
+			        }
+			    }
+			  return resultStringBuilder.toString();
+			}
+
 }
+
