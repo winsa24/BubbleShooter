@@ -23,6 +23,7 @@ import javax.swing.*;
 
 public class GameWindow extends JFrame {
 	
+	public static Font bubbleFont;
 	public static int soundVolume=-4;
 	private Loader loader = new Loader();
 	private BubbleShooter bubbleShooter = new BubbleShooter(this,loader);
@@ -33,8 +34,10 @@ public class GameWindow extends JFrame {
 	private Popup gameOverPopup;
 	private int currentScore;
 	private int highScore = 1000;
-	private JLabel yourScoreLabel = new JLabel("YOUR SCORE : " + currentScore);
+	private JLabel yourScoreLabel = new JLabel("         Your Score : " + currentScore);
 	private JLabel scoreLabel = new JLabel("YOUR SCORE : " + currentScore);
+	private JLabel highScoreLabel = new JLabel("         Highscore : " + highScore);
+	private JLabel newHighScoreLabel = new JLabel("");
 	
 	public GameWindow(String title) {
 		super(title);
@@ -60,21 +63,22 @@ public class GameWindow extends JFrame {
 
 	private void setupTop(JPanel topPanel) {
 		
+		this.setupFont();
 		topPanel.setPreferredSize(new Dimension(1000,100));
 		topPanel.setBackground(BSColor.trypanBlue);	
-		topPanel.add(Box.createHorizontalStrut(10));
+		topPanel.add(Box.createHorizontalStrut(20));
 
 		
 		JButton backButton = setupButton(topPanel, "return.png", "return_hover.png", 48,48);
 		backButton.addActionListener(e -> System.exit(0));
-		topPanel.add(Box.createHorizontalStrut(250));
+		topPanel.add(Box.createHorizontalStrut(140));
 		
 		JLabel title = new JLabel("Happy Bubble Shooter");
-		title.setFont(new Font("Calibri", Font.BOLD, 32));
+		title.setFont(bubbleFont);
 		title.setForeground(Color.WHITE);
 		topPanel.add(title);
 		
-		topPanel.add(Box.createHorizontalStrut(150));
+		topPanel.add(Box.createHorizontalStrut(70));
 		
 		JButton resetButton = setupButton(topPanel, "reset.png", "reset_hover.png", 48,48);
 		resetButton.addActionListener(e -> {bubbleShooter.reset();
@@ -89,6 +93,23 @@ public class GameWindow extends JFrame {
 		paramButton.addActionListener(e -> paramPopup.show());
 		
 		this.getContentPane().add(topPanel,BorderLayout.NORTH);
+	}
+	
+	private void setupFont() {
+		URL url = this.getClass().getClassLoader().getResource("data/Bubblegum.ttf");
+		try {	
+				URI uri = new URI(url.toString());
+				File file = new File(uri.getPath());
+				bubbleFont = Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(45f);
+			    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			    ge.registerFont(bubbleFont);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void setupMainPanel(BubbleShooter bubbleShooter) {
@@ -157,12 +178,13 @@ public class GameWindow extends JFrame {
 	}
 	
 	public void setupGameOver() {
+		 setupFont();
 	     gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.Y_AXIS));
 	     gameOverPanel.setBorder(BorderFactory.createLineBorder(BSColor.blackCherry2, 5, true));
 	     gameOverPanel.setBackground(BSColor.trypanBlue);
 	     
 	     JLabel gameOverLabel = (JLabel) gameOverPanel.add(new JLabel("    GAME OVER!    "));
-	     gameOverLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 40));
+	     gameOverLabel.setFont(bubbleFont);
 	     gameOverLabel.setForeground(Color.WHITE);
 	     
 	     gameOverPanel.add(Box.createVerticalStrut(50));
@@ -173,7 +195,20 @@ public class GameWindow extends JFrame {
 			e1.printStackTrace();
 			System.out.println("High score file not found");
 		}   
-	    
+	     yourScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+		 yourScoreLabel.setForeground(Color.WHITE);
+		 gameOverPanel.add(yourScoreLabel);
+		 
+		 highScoreLabel.setText("         High Score : " + highScore);
+		 highScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 24));
+		 highScoreLabel.setForeground(Color.WHITE);
+		 gameOverPanel.add(highScoreLabel);
+		 
+		 newHighScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 18));
+		 newHighScoreLabel.setForeground(Color.WHITE);			
+		 gameOverPanel.add(newHighScoreLabel);
+		 
+		 gameOverPanel.add(Box.createVerticalStrut(30));
 	     this.gameOverPopup =  new PopupFactory().getPopup(this, gameOverPanel, 350, 250);
 	}
 	
@@ -212,20 +247,13 @@ public class GameWindow extends JFrame {
 	
 	public void displayGameOver() {
 		  
-	    yourScoreLabel.setText("Your Score : " + currentScore);
-	    yourScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-	    yourScoreLabel.setForeground(Color.WHITE);
-		gameOverPanel.add(yourScoreLabel);
-		
-		JLabel highScoreLabel = (JLabel) gameOverPanel.add(new JLabel("High Score : " + highScore));
-	    highScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-	    highScoreLabel.setForeground(Color.WHITE);
+	    yourScoreLabel.setText("         Your Score : " + currentScore);
+	    newHighScoreLabel.setText("");
+	    
 		if(currentScore>= highScore) {
-			highScoreLabel.setText("High Score : " +  currentScore);
-			JLabel newHighScoreLabel = (JLabel) gameOverPanel.add(new JLabel("New highscore !"));
-			newHighScoreLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 16));
-			newHighScoreLabel.setForeground(Color.WHITE);
-			
+			highScoreLabel.setText("         High Score : " +  currentScore);
+			newHighScoreLabel.setText("           New highscore !");
+		
 			
 			URL url = this.getClass().getClassLoader().getResource("data/highscore.txt");
 			URI uri;
